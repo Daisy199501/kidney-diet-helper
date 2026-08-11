@@ -652,7 +652,7 @@ function recipeCardHtml(r){
       <div class="meta">${r.tags.map(t=>`<span class="pill ${t.includes("慎")?"warn":"green"}">${t}</span>`).join("")}</div>
       <div class="recipe-ing">${r.ingredients.map(i=>i[0]).join("、")}</div>
       <div class="reasons">${r.reasons.slice(0,2).map(x=>`<div>${x}</div>`).join("")}</div>
-      ${r.missing.length ? `<div class="missing">缺：${r.missing.slice(0,3).map(i=>i[0]).join("、")}${r.missing.length>3?" 等":""}</div>` : ""}
+      ${(r.missing||[]).length ? `<div class="missing">缺：${r.missing.slice(0,3).map(i=>i[0]).join("、")}${r.missing.length>3?" 等":""}</div>` : ""}
       <div class="actions">
         <button class="btn secondary sm" data-open="${r.id}">查看做法</button>
         <button class="btn ghost sm ${fav?"fav-on":""}" data-fav="${r.id}">${fav?"已收藏":"收藏"}</button>
@@ -765,7 +765,7 @@ function toggleFav(id){
 
 function renderFavs(){
   const box = el("favContent");
-  const list = RECIPES.filter(r=>favs.includes(r.id)).map(r=>({...r,score:r.flags.includes("highK")?55:88,reasons:["已收藏"]}));
+  const list = RECIPES.filter(r=>favs.includes(r.id)).map(r=>({...r, score:r.flags.includes("highK")?55:88, reasons:["已收藏"], present:[], missing:[]}));
   if(!list.length){
     box.innerHTML = `<div class="empty">还没有收藏菜谱。在菜谱详情页点击“收藏”即可保存到本机。</div>`;
     return;
@@ -1109,10 +1109,10 @@ function exportIcs(){
 document.addEventListener("click", e=>{
   const viewBtn = e.target.closest("[data-view]");
   if(viewBtn){ showView(viewBtn.getAttribute("data-view")); return; }
-  const openBtn = e.target.closest("[data-open]");
-  if(openBtn){ openRecipe(openBtn.getAttribute("data-open")); return; }
   const favBtn = e.target.closest("[data-fav]");
   if(favBtn){ toggleFav(favBtn.getAttribute("data-fav")); return; }
+  const openBtn = e.target.closest("[data-open]");
+  if(openBtn){ openRecipe(openBtn.getAttribute("data-open")); return; }
   const delBtn = e.target.closest("[data-del]");
   if(delBtn){ deleteReminder(delBtn.getAttribute("data-del")); return; }
   const addTimeBtn = e.target.closest("#addTimeBtn");
