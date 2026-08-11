@@ -2,7 +2,7 @@ const { chromium } = require('C:/Users/18210/.cache/codex-runtimes/codex-primary
 const fs = require('fs');
 const path = require('path');
 
-const BASE = 'http://127.0.0.1:8000/';
+const BASE = process.env.BASE_URL || 'http://127.0.0.1:8000/';
 const SHOTS = 'C:/tmp/web/shots/';
 fs.mkdirSync(SHOTS, { recursive: true });
 
@@ -228,6 +228,26 @@ async function main() {
     await page.waitForTimeout(100);
     const preview2 = await page.locator('#profileTargets .preview-grid').textContent();
     ok('透析期水显示“遵医嘱”', preview2.includes('遵医嘱'));
+    await page.close();
+  }
+
+  // ---------- 超标红色高亮 ----------
+  {
+    const page = await newPage(browser, { width: 390, height: 844 });
+    await page.goto(BASE, { waitUntil: 'networkidle' });
+    await fillProfile(page, { region: '华北', stage: 'CKD 3-5期非透析', height: '170', weight: '60', gender: '男', activity: '轻体力', potassium: '偏高' });
+    await page.evaluate(() => {
+      localStorage.setItem('ys_plan', JSON.stringify({ breakfast: 7, lunch: 16, dinner: 31, snack: null }));
+    });
+    await page.reload({ waitUntil: 'networkidle' });
+    await page.click('.tabbar [data-view="plan"]');
+    await page.waitForSelector('#view-plan.active');
+    const overCount = await page.locator('.totals-row.over').count();
+    const kRow = page.locator('.totals-row', { hasText: '钾' }).first();
+    const hasOverClass = await kRow.evaluate(el => el.classList.contains('over'));
+    const numColor = await kRow.locator('.totals-num').evaluate(el => getComputedStyle(el).color);
+    ok('超标营养素红色高亮（钾行）', hasOverClass && overCount >= 1, `over=${overCount} color=${numColor}`);
+    await page.screenshot({ path: SHOTS + 'use7-exceed-red.png' });
     await page.close();
   }
 
