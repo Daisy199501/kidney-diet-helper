@@ -1,0 +1,1185 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light">
+<title>肾友食养助手 - 可点击原型</title>
+<style>
+:root{
+  --bg:#f5f7f4;
+  --surface:#ffffff;
+  --ink:#1c2a23;
+  --muted:#5d6b63;
+  --line:#dde5de;
+  --brand:#2e7d5b;
+  --brand-dark:#1f5f46;
+  --brand-soft:#e4f1ea;
+  --accent:#c26a3b;
+  --accent-soft:#f9ece1;
+  --info:#3f6f9c;
+  --info-soft:#e8eff7;
+  --danger:#b14343;
+  --danger-soft:#f9e9e9;
+  --radius:8px;
+  --shadow:0 1px 2px rgba(20,40,30,.05),0 4px 14px rgba(20,40,30,.05);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",system-ui,-apple-system,"Segoe UI",sans-serif;
+  background:var(--bg);
+  color:var(--ink);
+  font-size:15px;
+  line-height:1.55;
+  -webkit-text-size-adjust:100%;
+}
+button,select,input{font:inherit;color:inherit}
+button{cursor:pointer;border:0;background:none;padding:0}
+.app{max-width:1080px;margin:0 auto;padding:0 16px 110px}
+.topbar{
+  position:sticky;top:0;z-index:20;
+  background:rgba(255,255,255,.96);
+  border-bottom:1px solid var(--line);
+}
+.topbar-inner{
+  max-width:1080px;margin:0 auto;padding:10px 16px;
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+}
+.brand{font-size:17px;font-weight:700;color:var(--brand-dark);letter-spacing:0}
+.brand small{display:block;font-size:11px;color:var(--muted);font-weight:400}
+.topnav{display:none;gap:6px}
+.navbtn{
+  min-height:40px;padding:8px 14px;border-radius:var(--radius);
+  color:var(--muted);font-weight:600;white-space:nowrap;
+}
+.navbtn.active{background:var(--brand-soft);color:var(--brand-dark)}
+main{padding-top:16px}
+.view{display:none}
+.view.active{display:block;animation:fade .18s ease}
+@keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.card{
+  background:var(--surface);border:1px solid var(--line);
+  border-radius:var(--radius);box-shadow:var(--shadow);
+}
+.section-title{font-size:16px;font-weight:700;margin:20px 0 10px}
+.summary-bar{
+  display:flex;flex-wrap:wrap;gap:8px;align-items:center;
+  background:var(--surface);border:1px solid var(--line);
+  border-radius:var(--radius);padding:12px 14px;margin-bottom:14px;
+}
+.summary-bar strong{font-size:14px}
+.pill{
+  display:inline-block;padding:2px 9px;border-radius:999px;
+  background:var(--info-soft);color:var(--info);
+  font-size:12px;white-space:nowrap;
+}
+.pill.warn{background:var(--accent-soft);color:var(--accent)}
+.pill.soft{background:#eef1ee;color:var(--muted)}
+.pill.green{background:var(--brand-soft);color:var(--brand-dark)}
+.recipe-grid{display:grid;gap:14px;grid-template-columns:1fr}
+.recipe-card{
+  display:flex;flex-direction:column;gap:10px;padding:14px;
+  min-height:230px;cursor:pointer;
+}
+.recipe-card:active{transform:translateY(1px)}
+.recipe-head{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.recipe-title{font-size:16px;font-weight:700;line-height:1.35}
+.meta{display:flex;flex-wrap:wrap;gap:6px;color:var(--muted);font-size:12px}
+.score{
+  flex:none;min-width:52px;text-align:center;padding:5px 6px;
+  border-radius:6px;background:var(--brand-soft);color:var(--brand-dark);
+  font-weight:700;font-size:13px;
+}
+.recipe-ing{font-size:13px;color:var(--muted)}
+.reasons{font-size:12px;color:var(--muted)}
+.reasons div::before{content:"· ";color:var(--brand)}
+.missing{color:var(--accent);font-size:12px}
+.actions{margin-top:auto;display:flex;gap:8px;flex-wrap:wrap}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:6px;
+  min-height:44px;padding:10px 16px;border-radius:var(--radius);
+  font-weight:600;background:var(--brand);color:#fff;
+}
+.btn.secondary{background:#eef1ee;color:var(--ink)}
+.btn.ghost{background:transparent;border:1px solid var(--line);color:var(--muted)}
+.btn.danger{background:var(--danger-soft);color:var(--danger)}
+.btn.block{width:100%}
+.btn.sm{min-height:38px;padding:7px 12px;font-size:13px}
+.btn.fav-on{background:var(--accent-soft);border-color:#eccbb4;color:var(--accent)}
+.field{margin-bottom:14px}
+.field-label{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:6px}
+select,input[type=text],input[type=time],input[type=search]{
+  width:100%;min-height:44px;padding:9px 12px;
+  border:1px solid var(--line);border-radius:var(--radius);background:#fff;
+}
+.form-row{display:grid;gap:12px;grid-template-columns:1fr}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{
+  min-height:38px;padding:7px 12px;border-radius:var(--radius);
+  border:1px solid var(--line);background:#fff;color:var(--muted);font-size:13px;
+}
+.chip.selected{background:var(--brand);border-color:var(--brand);color:#fff}
+.chip:hover{border-color:var(--brand)}
+.panel{
+  background:var(--surface);border:1px solid var(--line);
+  border-radius:var(--radius);padding:16px;margin-bottom:14px;
+}
+.panel h3{margin:0 0 10px;font-size:14px;color:var(--muted)}
+.detail-hero{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:12px}
+.backbtn{
+  min-height:40px;padding:8px 12px;border:1px solid var(--line);
+  border-radius:var(--radius);color:var(--muted);font-weight:600;
+}
+.recipe-title-lg{font-size:22px;font-weight:800;margin:0}
+.detail-grid{display:grid;gap:14px}
+.steps{counter-reset:step;list-style:none;padding:0;margin:0}
+.steps li{
+  position:relative;padding:0 0 12px 34px;
+  border-bottom:1px dashed var(--line);margin-bottom:12px;
+}
+.steps li:last-child{border-bottom:0}
+.steps li::before{
+  counter-increment:step;content:counter(step);
+  position:absolute;left:0;top:0;width:24px;height:24px;border-radius:50%;
+  background:var(--brand-soft);color:var(--brand-dark);
+  font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;
+}
+.ing-list{list-style:none;padding:0;margin:0;font-size:14px}
+.ing-list li{padding:7px 0;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:10px}
+.ing-list li:last-child{border-bottom:0}
+.ing-list .amt{color:var(--muted);flex:none}
+.nutri-table{width:100%;border-collapse:collapse;font-size:13px}
+.nutri-table td{padding:7px 0;border-bottom:1px solid var(--line)}
+.nutri-table td:last-child{text-align:right;font-weight:600}
+.notice{
+  background:var(--accent-soft);border:1px solid #ecd3c2;color:#7c4526;
+  border-radius:var(--radius);padding:12px;font-size:13px;
+}
+.info-note{
+  background:var(--info-soft);border:1px solid #cfddec;color:var(--info);
+  border-radius:var(--radius);padding:12px;font-size:13px;
+}
+.empty{
+  text-align:center;padding:36px 16px;color:var(--muted);
+  background:var(--surface);border:1px dashed var(--line);
+  border-radius:var(--radius);
+}
+.reminder-row{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  padding:12px 14px;margin-bottom:10px;
+}
+.reminder-row .info{min-width:0}
+.reminder-row .name{font-weight:700;font-size:14px}
+.reminder-row .sub{color:var(--muted);font-size:12px;margin-top:2px}
+.day-group{display:flex;gap:6px;flex-wrap:wrap}
+.day-chip{
+  width:40px;height:40px;border-radius:50%;border:1px solid var(--line);
+  background:#fff;color:var(--muted);font-size:12px;display:flex;
+  align-items:center;justify-content:center;
+}
+.day-chip.selected{background:var(--brand);border-color:var(--brand);color:#fff}
+.tabbar{
+  position:fixed;left:0;right:0;bottom:0;z-index:20;
+  display:grid;grid-template-columns:repeat(5,1fr);
+  background:#fff;border-top:1px solid var(--line);
+  padding:6px 8px calc(6px + env(safe-area-inset-bottom));
+}
+.tabbar button{
+  display:flex;flex-direction:column;align-items:center;gap:3px;
+  min-height:50px;font-size:11px;color:var(--muted);
+}
+.tabbar button.active{color:var(--brand-dark);font-weight:700}
+.foot{
+  margin:30px 0 8px;padding-top:14px;border-top:1px solid var(--line);
+  color:var(--muted);font-size:12px;
+}
+.overlay{
+  position:fixed;inset:0;z-index:60;background:rgba(24,36,30,.55);
+  display:flex;align-items:center;justify-content:center;padding:18px;
+}
+.overlay-card{
+  background:#fff;max-width:470px;width:100%;border-radius:var(--radius);
+  padding:22px;box-shadow:0 10px 40px rgba(0,0,0,.2);
+}
+.overlay h2{margin:0 0 10px;font-size:19px;color:var(--brand-dark)}
+.overlay p{font-size:14px;color:var(--muted);margin:0 0 16px}
+.overlay-card .btn{width:100%}
+.hidden{display:none!important}
+.target-grid{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(128px,1fr));margin-bottom:14px}
+.target-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:12px;box-shadow:var(--shadow)}
+.target-card .t-label{font-size:12px;color:var(--muted)}
+.target-card .t-value{font-size:21px;font-weight:800;margin-top:2px;letter-spacing:0}
+.target-card .t-unit{font-size:11px;color:var(--muted);font-weight:400;margin-left:2px}
+.target-card .t-note{font-size:11px;color:var(--muted);margin-top:4px}
+.target-preview{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:12px 14px;margin-bottom:14px;box-shadow:var(--shadow)}
+.target-preview.empty-preview{color:var(--muted);font-size:13px}
+.preview-head{font-size:13px;font-weight:600;color:var(--muted);display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.preview-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(118px,1fr));gap:8px}
+.preview-item{background:#f5f8f6;border:1px solid var(--line);border-radius:6px;padding:8px 10px;min-height:64px}
+.preview-item span{display:block;font-size:11px;color:var(--muted)}
+.preview-item strong{display:block;font-size:17px;margin-top:2px;letter-spacing:0}
+.preview-item small{font-size:10px;color:var(--muted);font-weight:400;margin-left:2px}
+.plan-tools{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.meal-grid{display:grid;gap:12px;grid-template-columns:1fr}
+.meal-slot{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:14px;box-shadow:var(--shadow)}
+.meal-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px}
+.meal-name{font-weight:700;font-size:14px}
+.meal-recipe{font-size:13px;color:var(--muted);min-height:24px;margin-bottom:8px}
+.plan-totals{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:14px;margin-top:14px}
+.plan-totals h3{margin:0 0 10px;font-size:14px;color:var(--muted)}
+.totals-row{display:grid;grid-template-columns:88px 1fr 100px;gap:10px;align-items:center;padding:7px 0;border-bottom:1px solid var(--line);font-size:13px}
+.totals-row:last-child{border-bottom:0}
+.bar{height:10px;border-radius:999px;background:#eef1ee;overflow:hidden}
+.bar-fill{height:100%;border-radius:999px;background:var(--brand)}
+.bar-fill.warn{background:var(--accent)}
+.bar-fill.over{background:var(--danger)}
+.totals-num{text-align:right;color:var(--muted);font-size:12px;white-space:nowrap}
+select[data-meal-select]{margin-top:8px}
+@media(min-width:640px){
+  .recipe-grid{grid-template-columns:repeat(2,1fr)}
+  .form-row{grid-template-columns:1fr 1fr}
+}
+@media(min-width:744px){
+  .tabbar{display:none}
+  .topnav{display:flex}
+  .detail-grid{grid-template-columns:1fr 1fr}
+  .recipe-grid{grid-template-columns:repeat(3,1fr)}
+  .meal-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(min-width:1024px){
+  .recipe-grid{grid-template-columns:repeat(3,1fr)}
+}
+</style>
+</head>
+<body>
+
+<div id="overlay" class="overlay">
+  <div class="overlay-card">
+    <h2>使用前请知悉</h2>
+    <p>本工具内容仅供饮食信息参考，不替代医生和营养师的诊断与治疗建议。具体饮食安排请咨询主治医生或注册营养师。</p>
+    <button class="btn" id="consentBtn">同意并继续</button>
+  </div>
+</div>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">肾友食养助手<small>饮食参考工具</small></div>
+    <nav class="topnav">
+      <button class="navbtn" data-view="rec">推荐</button>
+      <button class="navbtn" data-view="plan">计划</button>
+      <button class="navbtn" data-view="fav">收藏</button>
+      <button class="navbtn" data-view="remind">提醒</button>
+      <button class="navbtn" data-view="profile">档案</button>
+    </nav>
+  </div>
+</header>
+
+<main class="app">
+  <section id="view-rec" class="view">
+    <div id="recContent"></div>
+  </section>
+
+  <section id="view-fav" class="view">
+    <h2 class="section-title">我的收藏</h2>
+    <div id="favContent"></div>
+  </section>
+
+  <section id="view-plan" class="view">
+    <h2 class="section-title">每日营养与今日计划</h2>
+    <div id="planContent"></div>
+  </section>
+
+  <section id="view-remind" class="view">
+    <h2 class="section-title">服药与透析提醒</h2>
+    <div class="panel">
+      <h3>新建提醒</h3>
+      <form id="remindForm">
+        <div class="form-row">
+          <div class="field">
+            <label class="field-label" for="rm-name">提醒名称</label>
+            <input type="text" id="rm-name" maxlength="20" placeholder="例如：早上服药">
+          </div>
+          <div class="field">
+            <label class="field-label" for="rm-type">类型</label>
+            <select id="rm-type">
+              <option>服药</option>
+              <option>透析</option>
+              <option>复查</option>
+              <option>其他</option>
+            </select>
+          </div>
+        </div>
+        <div class="field">
+          <label class="field-label">时间点（最多5个）</label>
+          <div id="rm-times"></div>
+          <button type="button" class="btn ghost sm" id="addTimeBtn">添加时间点</button>
+        </div>
+        <div class="field">
+          <label class="field-label" for="rm-repeat">重复</label>
+          <select id="rm-repeat">
+            <option value="daily">每天</option>
+            <option value="weekly">每周</option>
+            <option value="monthly">每月</option>
+          </select>
+        </div>
+        <div class="field" id="rm-days-wrap">
+          <label class="field-label">每周重复</label>
+          <div class="day-group" id="rm-days">
+            <button type="button" class="day-chip" data-day="1">一</button>
+            <button type="button" class="day-chip" data-day="2">二</button>
+            <button type="button" class="day-chip" data-day="3">三</button>
+            <button type="button" class="day-chip" data-day="4">四</button>
+            <button type="button" class="day-chip" data-day="5">五</button>
+            <button type="button" class="day-chip" data-day="6">六</button>
+            <button type="button" class="day-chip" data-day="0">日</button>
+          </div>
+        </div>
+        <div class="field" id="rm-mday-wrap" style="display:none">
+          <label class="field-label" for="rm-mday">每月几号</label>
+          <input type="number" id="rm-mday" min="1" max="31" value="1">
+        </div>
+        <button type="submit" class="btn block">保存提醒</button>
+      </form>
+    </div>
+    <div id="remindList"></div>
+    <button class="btn secondary block" id="exportIcs">导出到系统日历</button>
+    <div class="info-note" style="margin-top:12px">公众号推送接入说明：待确认公众号类型后接入。服务号可走模板消息；个人订阅号用每日群发或菜单入口；正式接入前可先用系统日历提醒。</div>
+  </section>
+
+  <section id="view-profile" class="view">
+    <h2 class="section-title">我的档案</h2>
+    <form id="profileForm">
+      <div class="form-row">
+        <div class="field">
+          <label class="field-label" for="pf-region">所在地区</label>
+          <select id="pf-region"></select>
+        </div>
+        <div class="field">
+          <label class="field-label" for="pf-stage">疾病阶段</label>
+          <select id="pf-stage"></select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="field">
+          <label class="field-label" for="pf-height">身高（cm）</label>
+          <input type="number" id="pf-height" min="100" max="230" step="0.1" inputmode="decimal" placeholder="例如 170.5">
+        </div>
+        <div class="field">
+          <label class="field-label" for="pf-weight">体重（kg）</label>
+          <input type="number" id="pf-weight" min="30" max="200" step="0.1" inputmode="decimal" placeholder="例如 60.5">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="field">
+          <label class="field-label" for="pf-gender">性别</label>
+          <select id="pf-gender">
+            <option>男</option>
+            <option>女</option>
+          </select>
+        </div>
+        <div class="field">
+          <label class="field-label" for="pf-activity">体力活动</label>
+          <select id="pf-activity">
+            <option>轻体力</option>
+            <option>中体力</option>
+            <option>重体力</option>
+          </select>
+        </div>
+      </div>
+      <div class="field">
+        <label class="field-label">监测指标</label>
+        <div class="form-row">
+          <div class="field">
+            <label class="field-label" for="ind-potassium">血钾</label>
+            <select id="ind-potassium"></select>
+          </div>
+          <div class="field">
+            <label class="field-label" for="ind-phosphorus">血磷</label>
+            <select id="ind-phosphorus"></select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="field">
+            <label class="field-label" for="ind-sodium">血钠/血压</label>
+            <select id="ind-sodium"></select>
+          </div>
+          <div class="field">
+            <label class="field-label" for="ind-albumin">白蛋白</label>
+            <select id="ind-albumin"></select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="field">
+            <label class="field-label" for="ind-hemoglobin">血红蛋白</label>
+            <select id="ind-hemoglobin"></select>
+          </div>
+          <div class="field">
+            <label class="field-label" for="ind-uric">尿酸</label>
+            <select id="ind-uric"></select>
+          </div>
+        </div>
+      </div>
+      <div id="profileTargets"></div>
+      <div class="field">
+        <label class="field-label" for="ingSearch">家里现有食材</label>
+        <input type="search" id="ingSearch" placeholder="搜索食材">
+        <div class="chips" id="ingChips" style="margin-top:10px"></div>
+      </div>
+      <div class="info-note" style="margin-bottom:14px">档案只保存在本机浏览器，不会上传。</div>
+      <button type="submit" class="btn block">保存并生成推荐</button>
+    </form>
+  </section>
+
+  <section id="view-detail" class="view"></section>
+
+  <footer class="foot">
+    演示原型，菜谱与营养数据待按指南整理并审核。内容仅供参考，不替代医生和营养师的建议。
+  </footer>
+</main>
+
+<nav class="tabbar">
+  <button data-view="rec">推荐</button>
+  <button data-view="plan">计划</button>
+  <button data-view="fav">收藏</button>
+  <button data-view="remind">提醒</button>
+  <button data-view="profile">档案</button>
+</nav>
+
+<script src="recipes-extra.js"></script>
+<script>
+const REGIONS = ["东北","西北","华北","华东","华中","西南","华南"];
+const STAGES = ["CKD 1-2期","CKD 3-5期非透析","腹膜透析","血液透析"];
+const INDICATORS = [
+  ["potassium","血钾"],["phosphorus","血磷"],["sodium","血钠/血压"],
+  ["albumin","白蛋白"],["hemoglobin","血红蛋白"],["uric","尿酸"]
+];
+const STATUSES = ["不关注","正常","偏高","偏低"];
+const INGREDIENTS = ["土豆","茄子","鸡蛋","西红柿","西葫芦","冬瓜","豆腐","白菜","胡萝卜","西兰花","南瓜","小米","黄瓜","粉丝","山药","排骨","鲈鱼","苦瓜","虾仁","丝瓜","青椒","小葱","蒜","姜","菠菜","芹菜","莴笋","莲藕","木耳","香菇","平菇","金针菇","豆角","荷兰豆","玉米","大米","燕麦","鸡胸肉","瘦肉","牛肉","羊肉","鸭肉","草鱼","带鱼","鳕鱼","海带","紫菜","洋葱","白萝卜","红薯","芋头","上海青","油菜","生菜","圆白菜","佛手瓜","芦笋","秋葵","红萝卜","韭菜","花菜","豆腐干","鸡腿","银耳","百合","荞麦"];
+
+const RECIPES = [
+  {id:1,name:"番茄炒蛋",region:"华东",season:"春",meal:"午餐",stages:["all"],flags:["lowK","goodProtein"],tags:["低钾","优质蛋白"],nutrition:{energy:182,protein:12,fat:12,carb:9,sodium:380,potassium:265,phosphorus:168,calcium:35,iron:1.6,water:90},ingredients:[["鸡蛋","2枚"],["西红柿","1个约150g"],["小葱","5g"],["食用油","8g"]],steps:["西红柿切块，鸡蛋打散。","热油将蛋液炒至刚凝固，盛出备用。","下西红柿炒软，回锅拌匀，少盐调味。"],time:"10分钟",difficulty:"简单",substitutes:"西红柿可用西葫芦替换",notes:"少盐；蛋白质总量按分期和医嘱控制。",source:"示例数据，待审核"},
+  {id:2,name:"西葫芦炒肉丝",region:"华北",season:"夏",meal:"晚餐",stages:["all"],flags:["lowK","lowP","goodProtein"],tags:["低钾","低磷"],nutrition:{energy:168,protein:14,fat:9,carb:8,sodium:410,potassium:245,phosphorus:172,calcium:28,iron:1.8,water:110},ingredients:[["西葫芦","200g"],["瘦肉","60g"],["蒜","5g"],["食用油","8g"]],steps:["西葫芦切片，瘦肉切丝。","瘦肉丝焯水后捞出，去除部分磷。","热油爆香蒜片，下肉丝和西葫芦快炒，少盐调味。"],time:"12分钟",difficulty:"简单",substitutes:"瘦肉可用鸡胸肉替换",notes:"肉量按分期控制，汤不喝。",source:"示例数据，待审核"},
+  {id:3,name:"冬瓜豆腐汤",region:"华东",season:"夏",meal:"晚餐",stages:["all"],flags:["lowK","lowNa","goodProtein"],tags:["低钾","低钠","优质蛋白"],nutrition:{energy:96,protein:9,fat:4,carb:7,sodium:260,potassium:205,phosphorus:145,calcium:95,iron:1.4,water:320},ingredients:[["冬瓜","250g"],["豆腐","100g"],["姜","3g"],["香菜","5g"]],steps:["冬瓜去皮切块，豆腐切块。","水开后下冬瓜和姜片煮至半熟。","下豆腐再煮5分钟，少盐调味，撒香菜。"],time:"15分钟",difficulty:"简单",substitutes:"豆腐可用冬瓜瓤等量替换",notes:"汤不喝底，减少钠和磷摄入。",source:"示例数据，待审核"},
+  {id:4,name:"白菜炖豆腐",region:"东北",season:"冬",meal:"午餐",stages:["CKD 3-5期非透析","腹膜透析","血液透析"],flags:["lowNa","goodProtein"],tags:["低钠","优质蛋白"],nutrition:{energy:142,protein:11,fat:7,carb:10,sodium:310,potassium:330,phosphorus:190,calcium:130,iron:2.0,water:280},ingredients:[["大白菜","200g"],["北豆腐","100g"],["葱","5g"],["食用油","6g"]],steps:["白菜切段，豆腐切块。","少油下葱段，加白菜翻炒。","加水与豆腐同炖15分钟，少盐调味。"],time:"20分钟",difficulty:"简单",substitutes:"白菜可用娃娃菜替换",notes:"豆腐磷含量中等，按医嘱限量。",source:"示例数据，待审核"},
+  {id:5,name:"蒸茄子",region:"西南",season:"夏",meal:"午餐",stages:["all"],flags:["lowK","lowP","lowNa"],tags:["低钾","低磷","低钠"],nutrition:{energy:88,protein:3,fat:4,carb:11,sodium:180,potassium:230,phosphorus:68,calcium:24,iron:0.9,water:120},ingredients:[["茄子","200g"],["蒜","6g"],["生抽","3g"],["香油","2g"]],steps:["长茄子切条，上锅蒸8分钟。","蒜切末，加生抽和香油调成蘸料。","茄子蒸熟后淋少量蘸料即可。"],time:"15分钟",difficulty:"简单",substitutes:"茄子可用西葫芦替换",notes:"蘸料少量，避免过咸。",source:"示例数据，待审核"},
+  {id:6,name:"胡萝卜炒西兰花",region:"西北",season:"春",meal:"午餐",stages:["all"],flags:["lowP"],tags:["低磷"],nutrition:{energy:120,protein:5,fat:6,carb:13,sodium:240,potassium:390,phosphorus:110,calcium:52,iron:1.5,water:130},ingredients:[["西兰花","150g"],["胡萝卜","80g"],["蒜","5g"],["食用油","7g"]],steps:["西兰花掰小朵，胡萝卜切片。","西兰花焯水1分钟捞出。","热油炒胡萝卜，再下西兰花和蒜片，少盐调味。"],time:"12分钟",difficulty:"简单",substitutes:"西兰花可用菜花替换",notes:"高钾时请遵医嘱并控制份量。",source:"示例数据，待审核"},
+  {id:7,name:"土豆烧茄子",region:"东北",season:"秋",meal:"晚餐",stages:["CKD 1-2期"],flags:["highK"],tags:["慎用：高钾"],nutrition:{energy:210,protein:5,fat:11,carb:26,sodium:320,potassium:620,phosphorus:130,calcium:30,iron:1.2,water:100},ingredients:[["土豆","150g"],["茄子","150g"],["青椒","30g"],["食用油","10g"]],steps:["土豆切块浸泡，茄子切块。","土豆焯水后捞出，降低部分钾。","热油煸炒土豆和茄子，加水焖熟，少盐调味。"],time:"25分钟",difficulty:"中等",substitutes:"土豆可用冬瓜替换",notes:"土豆含钾较高，血钾偏高时不建议食用。",source:"示例数据，待审核"},
+  {id:8,name:"南瓜小米粥",region:"华北",season:"秋",meal:"早餐",stages:["all"],flags:["lowK","lowP","lowNa"],tags:["低钾","低磷","低钠"],nutrition:{energy:148,protein:4,fat:2,carb:30,sodium:120,potassium:210,phosphorus:105,calcium:18,iron:1.1,water:380},ingredients:[["南瓜","80g"],["小米","40g"],["清水","500ml"]],steps:["南瓜去皮切小块。","小米淘洗后与南瓜同煮。","小火熬20分钟至粥软稠即可。"],time:"30分钟",difficulty:"简单",substitutes:"南瓜可用山药替换",notes:"一次食用量适中，不加糖。",source:"示例数据，待审核"},
+  {id:9,name:"黄瓜拌粉丝",region:"华中",season:"夏",meal:"早餐",stages:["all"],flags:["lowK","lowP","lowNa"],tags:["低钾","低磷","低钠"],nutrition:{energy:132,protein:3,fat:3,carb:24,sodium:150,potassium:190,phosphorus:80,calcium:22,iron:0.8,water:110},ingredients:[["黄瓜","100g"],["粉丝","40g"],["醋","5g"],["香油","2g"]],steps:["粉丝用温水泡软后过凉。","黄瓜切丝与粉丝同拌。","加醋和香油调味即可。"],time:"10分钟",difficulty:"简单",substitutes:"黄瓜可用丝瓜替换",notes:"粉丝属于主食类，注意控制份量。",source:"示例数据，待审核"},
+  {id:10,name:"山药排骨汤",region:"华中",season:"冬",meal:"晚餐",stages:["CKD 1-2期"],flags:["goodProtein"],tags:["优质蛋白"],nutrition:{energy:198,protein:16,fat:10,carb:13,sodium:430,potassium:480,phosphorus:210,calcium:45,iron:1.6,water:360},ingredients:[["山药","120g"],["排骨","80g"],["姜","3g"],["枸杞","3g"]],steps:["排骨焯水去浮沫。","山药去皮切段，与排骨、姜同炖。","小火炖40分钟，少盐调味。"],time:"60分钟",difficulty:"中等",substitutes:"排骨可用瘦肉替换",notes:"汤易含钠和嘌呤，少量喝，肉和山药适量吃。",source:"示例数据，待审核"},
+  {id:11,name:"清蒸鲈鱼",region:"华南",season:"春",meal:"晚餐",stages:["CKD 3-5期非透析","腹膜透析","血液透析"],flags:["goodProtein","lowPurine"],tags:["优质蛋白","低嘌呤"],nutrition:{energy:160,protein:19,fat:8,carb:2,sodium:300,potassium:360,phosphorus:220,calcium:38,iron:1.0,water:90},ingredients:[["鲈鱼","120g"],["姜","5g"],["葱","5g"],["蒸鱼豉油","4g"]],steps:["鲈鱼处理干净，铺姜片。","水开后大火蒸8分钟。","去姜丝撒葱花，淋少量豉油。"],time:"18分钟",difficulty:"中等",substitutes:"鲈鱼可用鸡胸肉替换",notes:"不再加盐，豉油少量；磷中等，按医嘱限量。",source:"示例数据，待审核"},
+  {id:12,name:"凉拌苦瓜",region:"西南",season:"夏",meal:"午餐",stages:["CKD 3-5期非透析","腹膜透析","血液透析"],flags:["lowK","lowP","lowNa","lowPurine"],tags:["低钾","低磷","低钠"],nutrition:{energy:58,protein:2,fat:2,carb:9,sodium:90,potassium:180,phosphorus:62,calcium:22,iron:0.7,water:90},ingredients:[["苦瓜","150g"],["蒜","5g"],["醋","4g"],["香油","2g"]],steps:["苦瓜去瓤切片，焯水1分钟。","过凉水沥干，加蒜末。","用醋和香油拌匀即可。"],time:"10分钟",difficulty:"简单",substitutes:"苦瓜可用黄瓜替换",notes:"焯水可帮助减少部分钾。",source:"示例数据，待审核"},
+  {id:13,name:"冬瓜虾仁",region:"华东",season:"夏",meal:"晚餐",stages:["CKD 3-5期非透析","腹膜透析","血液透析"],flags:["lowK","goodProtein","lowPurine"],tags:["低钾","优质蛋白"],nutrition:{energy:118,protein:12,fat:6,carb:6,sodium:350,potassium:250,phosphorus:190,calcium:80,iron:1.2,water:260},ingredients:[["冬瓜","200g"],["鲜虾仁","50g"],["姜","3g"],["食用油","6g"]],steps:["冬瓜切片，虾仁去虾线。","热油炒姜片和虾仁至变色。","下冬瓜翻炒，加水焖熟，少盐调味。"],time:"15分钟",difficulty:"简单",substitutes:"虾仁可用瘦肉替换",notes:"虾仁磷中等，控制份量。",source:"示例数据，待审核"},
+  {id:14,name:"丝瓜炒蛋",region:"华南",season:"夏",meal:"午餐",stages:["all"],flags:["lowK","lowP","goodProtein"],tags:["低钾","低磷","优质蛋白"],nutrition:{energy:150,protein:9,fat:10,carb:8,sodium:300,potassium:220,phosphorus:150,calcium:40,iron:1.4,water:120},ingredients:[["丝瓜","180g"],["鸡蛋","1枚"],["蒜","3g"],["食用油","7g"]],steps:["丝瓜去皮切滚刀块。","鸡蛋打散，少油炒至刚凝固盛出。","下丝瓜炒软，回锅拌匀，少盐调味。"],time:"12分钟",difficulty:"简单",substitutes:"丝瓜可用冬瓜替换",notes:"少盐；蛋白质按分期控制。",source:"示例数据，待审核"}
+];
+if(typeof EXTRA_RECIPES !== "undefined") RECIPES.push(...EXTRA_RECIPES);
+
+const LS = {
+  get(k,d){ try{ return JSON.parse(localStorage.getItem(k)) ?? d }catch(e){ return d } },
+  set(k,v){ localStorage.setItem(k, JSON.stringify(v)) }
+};
+
+let profile = LS.get("ys_profile", null);
+let favs = LS.get("ys_favs", []);
+let reminders = LS.get("ys_reminders", []);
+let plan = LS.get("ys_plan", {breakfast:null, lunch:null, dinner:null, snack:null});
+let lastView = "rec";
+let selectedIngredients = new Set();
+let selectedDays = new Set([1,2,3,4,5]);
+let selectedTimes = ["08:00"];
+
+function el(id){ return document.getElementById(id); }
+
+function showView(name){
+  if(name === "back"){ name = lastView; }
+  else if(name === "rec" || name === "fav"){ lastView = name; }
+  document.querySelectorAll(".view").forEach(v=>v.classList.remove("active"));
+  el("view-"+name).classList.add("active");
+  document.querySelectorAll("[data-view]").forEach(b=>{
+    const active = b.getAttribute("data-view") === name;
+    b.classList.toggle("active", active);
+  });
+  if(name === "rec") renderRec();
+  if(name === "fav") renderFavs();
+  if(name === "remind") renderReminders();
+  if(name === "plan") renderPlan();
+  window.scrollTo({top:0, behavior:"instant"});
+}
+
+function initProfileForm(){
+  const regionSel = el("pf-region");
+  const stageSel = el("pf-stage");
+  regionSel.innerHTML = REGIONS.map(r=>`<option>${r}</option>`).join("");
+  stageSel.innerHTML = STAGES.map(s=>`<option>${s}</option>`).join("");
+  INDICATORS.forEach(([id])=>{
+    const sel = el("ind-"+id);
+    sel.innerHTML = STATUSES.map(s=>`<option>${s}</option>`).join("");
+  });
+  renderIngChips("");
+  if(profile){
+    regionSel.value = profile.region;
+    stageSel.value = profile.stage;
+    INDICATORS.forEach(([id])=>{
+      el("ind-"+id).value = profile.indicators[id] || "不关注";
+    });
+    if(profile.height) el("pf-height").value = profile.height;
+    if(profile.weight) el("pf-weight").value = profile.weight;
+    normalizeDecimalInput("pf-height");
+    normalizeDecimalInput("pf-weight");
+    if(profile.activity) el("pf-activity").value = profile.activity;
+    if(profile.gender) el("pf-gender").value = profile.gender;
+    selectedIngredients = new Set(profile.ingredients || []);
+    selectedDays = new Set(profile.days || [1,2,3,4,5]);
+    renderIngChips("");
+    markIngChips();
+    markDayChips();
+  }
+  renderProfileTargets();
+}
+
+function renderIngChips(filter){
+  const box = el("ingChips");
+  const list = INGREDIENTS.filter(n=>!filter || n.includes(filter));
+  box.innerHTML = list.map(n=>`<button type="button" class="chip" data-ing="${n}">${n}</button>`).join("");
+  markIngChips();
+}
+
+function markIngChips(){
+  document.querySelectorAll("[data-ing]").forEach(b=>{
+    b.classList.toggle("selected", selectedIngredients.has(b.getAttribute("data-ing")));
+  });
+}
+
+function markDayChips(){
+  document.querySelectorAll("[data-day]").forEach(b=>{
+    b.classList.toggle("selected", selectedDays.has(Number(b.getAttribute("data-day"))));
+  });
+}
+
+function round1(n){
+  const num = Number(n);
+  return Number.isFinite(num) ? Math.round(num*10)/10 : null;
+}
+
+function normalizeDecimalInput(id){
+  const input = el(id);
+  const rounded = round1(input.value);
+  if(rounded !== null) input.value = String(rounded);
+}
+
+function saveProfileFromForm(){
+  const height = round1(el("pf-height").value);
+  const weight = round1(el("pf-weight").value);
+  if(height === null || weight === null){
+    alert("请填写身高和体重，用于计算每日营养需求。");
+    return;
+  }
+  const indicators = {};
+  INDICATORS.forEach(([id])=>{ indicators[id] = el("ind-"+id).value; });
+  profile = {
+    region: el("pf-region").value,
+    stage: el("pf-stage").value,
+    height: String(height),
+    weight: String(weight),
+    activity: el("pf-activity").value,
+    gender: el("pf-gender").value,
+    indicators,
+    ingredients: [...selectedIngredients]
+  };
+  LS.set("ys_profile", profile);
+  lastView = "rec";
+  showView("rec");
+}
+
+function recommend(profile){
+  const hard = [];
+  const prefer = [];
+  if(profile.indicators.potassium === "偏高") hard.push("lowK");
+  if(profile.indicators.phosphorus === "偏高") hard.push("lowP");
+  if(profile.indicators.sodium === "偏高") hard.push("lowNa");
+  if(profile.indicators.uric === "偏高") hard.push("lowPurine");
+  if(profile.indicators.albumin === "偏低") prefer.push("goodProtein");
+  if(profile.indicators.hemoglobin === "偏低") prefer.push("ironRich");
+
+  const userIngs = new Set(profile.ingredients);
+  const hardReason = {
+    lowK:"血钾偏高，本菜为低钾选择",
+    lowP:"血磷偏高，本菜为低磷选择",
+    lowNa:"血钠/血压需控制，本菜为低钠选择",
+    lowPurine:"尿酸偏高，本菜嘌呤较低"
+  };
+  const preferReason = {
+    goodProtein:"含优质蛋白，适合当前白蛋白水平",
+    ironRich:"含铁较丰富，供参考"
+  };
+
+  return RECIPES.filter(r=>{
+    if(!r.stages.includes("all") && !r.stages.includes(profile.stage)) return false;
+    return hard.every(f=>r.flags.includes(f));
+  }).map(r=>{
+    const present = r.ingredients.filter(([n])=>userIngs.has(n));
+    const missing = r.ingredients.filter(([n])=>!userIngs.has(n));
+    let score = 0;
+    if(r.region === profile.region) score += 20;
+    score += Math.round(40 * present.length / r.ingredients.length);
+    if(hard.every(f=>r.flags.includes(f))) score += 30;
+    if(prefer.every(f=>r.flags.includes(f))) score += 10;
+    const reasons = [];
+    hard.forEach(f=>{ if(r.flags.includes(f)) reasons.push(hardReason[f]); });
+    prefer.forEach(f=>{ if(r.flags.includes(f)) reasons.push(preferReason[f]); });
+    if(r.region === profile.region) reasons.push(r.region+"地区家常做法");
+    if(present.length) reasons.push("已匹配食材 "+present.length+"/"+r.ingredients.length);
+    else reasons.push("需准备全部食材");
+    return {...r, present, missing, score:Math.min(100,score), reasons};
+  }).sort((a,b)=>b.score-a.score);
+}
+
+function recipeCardHtml(r){
+  const fav = favs.includes(r.id);
+  return `
+    <article class="card recipe-card" data-open="${r.id}">
+      <div class="recipe-head">
+        <div>
+          <div class="recipe-title">${r.name}</div>
+          <div class="meta" style="margin-top:4px">
+            <span>${r.region}</span><span>${r.season}季</span><span>${r.meal}</span><span>${r.time}</span>
+          </div>
+        </div>
+        <div class="score">${r.score}%</div>
+      </div>
+      <div class="meta">${r.tags.map(t=>`<span class="pill ${t.includes("慎")?"warn":"green"}">${t}</span>`).join("")}</div>
+      <div class="recipe-ing">${r.ingredients.map(i=>i[0]).join("、")}</div>
+      <div class="reasons">${r.reasons.slice(0,2).map(x=>`<div>${x}</div>`).join("")}</div>
+      ${r.missing.length ? `<div class="missing">缺：${r.missing.slice(0,3).map(i=>i[0]).join("、")}${r.missing.length>3?" 等":""}</div>` : ""}
+      <div class="actions">
+        <button class="btn secondary sm" data-open="${r.id}">查看做法</button>
+        <button class="btn ghost sm ${fav?"fav-on":""}" data-fav="${r.id}">${fav?"已收藏":"收藏"}</button>
+      </div>
+    </article>`;
+}
+
+function renderRec(){
+  const box = el("recContent");
+  if(!profile){
+    box.innerHTML = `<div class="empty"><p style="margin:0 0 14px">还没有档案，先填写地区、指标和现有食材。</p><button class="btn" data-view="profile">去填写档案</button></div>`;
+    return;
+  }
+  const list = recommend(profile);
+  const indBadges = INDICATORS.filter(([id,label])=>{ const v=profile.indicators[id]; return v && v!=="不关注" && v!=="正常"; })
+    .map(([id,label])=>`<span class="pill warn">${label}${profile.indicators[id]==="偏高"?"偏高":"偏低"}</span>`);
+  const summary = `
+    <div class="summary-bar">
+      <strong>${profile.region} · ${profile.stage}</strong>
+      ${indBadges.join("")}
+      <span class="pill soft">现有食材 ${profile.ingredients.length} 种</span>
+      <button class="btn ghost sm" data-view="profile">重新填写</button>
+    </div>`;
+  const search = `<input type="search" id="recSearch" placeholder="按菜名搜索" style="margin-bottom:12px">`;
+  if(!list.length){
+    box.innerHTML = summary + search + `<div class="empty"><p style="margin:0 0 12px">没有符合当前指标和分期的菜谱，可放宽“偏高”指标或修改分期。</p><button class="btn secondary" data-view="profile">调整档案</button></div>`;
+    return;
+  }
+  box.innerHTML = summary + search + `<div class="recipe-grid">${list.map(recipeCardHtml).join("")}</div>`;
+  const searchBox = el("recSearch");
+  if(searchBox){
+    searchBox.addEventListener("input", e=>{
+      const kw = e.target.value.trim();
+      const filtered = kw ? list.filter(r=>r.name.includes(kw)) : list;
+      const grid = document.querySelector("#view-rec .recipe-grid");
+      if(grid) grid.innerHTML = filtered.map(recipeCardHtml).join("");
+    });
+  }
+}
+
+function openRecipe(id){
+  const r = RECIPES.find(x=>x.id===Number(id));
+  if(!r) return;
+  lastView = lastView === "fav" ? "fav" : "rec";
+  const fav = favs.includes(r.id);
+  el("view-detail").innerHTML = `
+    <div class="detail-hero">
+      <button class="backbtn" data-view="back">返回</button>
+      <h1 class="recipe-title-lg">${r.name}</h1>
+    </div>
+    <div class="meta" style="margin-bottom:14px">
+      ${r.tags.map(t=>`<span class="pill ${t.includes("慎")?"warn":"green"}">${t}</span>`).join("")}
+      <span class="pill soft">${r.region} · ${r.season}季 · ${r.meal}</span>
+      <span class="pill soft">${r.time} · ${r.difficulty}</span>
+    </div>
+    <div class="detail-grid">
+      <div class="panel">
+        <h3>食材与用量</h3>
+        <ul class="ing-list">${r.ingredients.map(([n,a])=>`<li><span>${n}</span><span class="amt">${a}</span></li>`).join("")}</ul>
+      </div>
+      <div class="panel">
+        <h3>营养估算（示例）</h3>
+        <table class="nutri-table">
+          ${[["能量",""+r.nutrition.energy+" kcal"],["蛋白质",""+r.nutrition.protein+" g"],["脂肪",""+r.nutrition.fat+" g"],["碳水",""+r.nutrition.carb+" g"],["钠",""+r.nutrition.sodium+" mg"],["钾",""+r.nutrition.potassium+" mg"],["磷",""+r.nutrition.phosphorus+" mg"],["钙",""+r.nutrition.calcium+" mg"],["铁",""+r.nutrition.iron+" mg"],["水",""+r.nutrition.water+" ml"]]
+            .map(([k,v])=>`<tr><td>${k}</td><td>${v}</td></tr>`).join("")}
+        </table>
+      </div>
+      <div class="panel" style="grid-column:1/-1">
+        <h3>做法步骤</h3>
+        <ol class="steps">${r.steps.map(s=>`<li>${s}</li>`).join("")}</ol>
+      </div>
+      <div class="panel">
+        <h3>替代与注意事项</h3>
+        <p style="margin:0 0 10px;font-size:14px"><strong>替代：</strong>${r.substitutes}</p>
+        <div class="notice">${r.notes}</div>
+      </div>
+      <div class="panel">
+        <h3>加入今日计划</h3>
+        <select id="planMealSelect">
+          <option value="breakfast">早餐</option>
+          <option value="lunch">午餐</option>
+          <option value="dinner">晚餐</option>
+          <option value="snack">加餐</option>
+        </select>
+        <div style="display:flex;align-items:center;gap:10px;margin-top:10px;flex-wrap:wrap">
+          <button class="btn sm" data-add-plan="${r.id}">加入今日计划</button>
+          <span id="planAddedMsg" style="display:none;font-size:12px;color:var(--brand-dark)"></span>
+        </div>
+      </div>
+      <div class="panel">
+        <h3>来源</h3>
+        <p style="margin:0 0 12px;font-size:13px;color:var(--muted)">${r.source}。正式版将标注指南附录页码或审核记录。</p>
+        <button class="btn sm ${fav?"fav-on":""}" data-fav="${r.id}">${fav?"已收藏":"收藏菜谱"}</button>
+      </div>
+    </div>`;
+  showView("detail");
+}
+
+function toggleFav(id){
+  id = Number(id);
+  if(favs.includes(id)) favs = favs.filter(x=>x!==id);
+  else favs.push(id);
+  LS.set("ys_favs", favs);
+  if(el("view-fav").classList.contains("active")) renderFavs();
+  if(el("view-detail").classList.contains("active")) openRecipe(id);
+  else renderRec();
+}
+
+function renderFavs(){
+  const box = el("favContent");
+  const list = RECIPES.filter(r=>favs.includes(r.id)).map(r=>({...r,score:r.flags.includes("highK")?55:88,reasons:["已收藏"]}));
+  if(!list.length){
+    box.innerHTML = `<div class="empty">还没有收藏菜谱。在菜谱详情页点击“收藏”即可保存到本机。</div>`;
+    return;
+  }
+  box.innerHTML = `<div class="recipe-grid">${list.map(recipeCardHtml).join("")}</div>`;
+}
+
+function normalizeReminder(r){
+  const times = r.times && r.times.length ? r.times : [r.time].filter(Boolean);
+  const repeat = r.repeat || "weekly";
+  const days = r.days && r.days.length ? r.days : [1,2,3,4,5];
+  const dayOfMonth = r.dayOfMonth || 1;
+  return {...r, times, repeat, days, dayOfMonth};
+}
+
+function repeatText(r){
+  if(r.repeat === "daily") return "每天";
+  if(r.repeat === "monthly") return "每月"+r.dayOfMonth+"号";
+  const dayNames = {0:"周日",1:"周一",2:"周二",3:"周三",4:"周四",5:"周五",6:"周六"};
+  return "每周 " + r.days.map(d=>dayNames[d]).join("、");
+}
+
+function renderReminders(){
+  const box = el("remindList");
+  if(!reminders.length){
+    box.innerHTML = `<div class="empty">暂无提醒，先在上方新建一条。</div>`;
+    return;
+  }
+  box.innerHTML = reminders.map(normalizeReminder).sort((a,b)=>a.times[0].localeCompare(b.times[0])).map(r=>`
+    <div class="card reminder-row">
+      <div class="info">
+        <div class="name">${r.name}</div>
+        <div class="sub">${r.type} · ${r.times.join("、")} · ${repeatText(r)}</div>
+      </div>
+      <button class="btn danger sm" data-del="${r.id}">删除</button>
+    </div>`).join("");
+}
+
+const MEAL_LABELS = {breakfast:"早餐", lunch:"午餐", dinner:"晚餐", snack:"加餐"};
+
+function computeTargets(p){
+  const h = Number(p.height);
+  const w = Number(p.weight);
+  const hm = h/100;
+  const bmi = w/(hm*hm);
+  const std = 22*hm*hm;
+  let ref = w;
+  if(bmi >= 24) ref = std + (w-std)*0.25;
+  const factor = p.activity === "中体力" ? 30 : (p.activity === "重体力" ? 35 : 25);
+  const energy = Math.round(ref*factor);
+  const coeff = p.stage === "CKD 1-2期" ? 0.8 : (p.stage === "CKD 3-5期非透析" ? 0.6 : 1.2);
+  const protein = Math.round(ref*coeff*10)/10;
+  const sodium = p.indicators.sodium === "偏高" ? 1500 : 2000;
+  const potassium = p.indicators.potassium === "偏高" ? 2000 : 2500;
+  const phosphorus = p.indicators.phosphorus === "偏高" ? 700 : 800;
+  const calcium = 800;
+  const iron = p.gender === "女" ? 20 : 12;
+  const water = (p.stage === "腹膜透析" || p.stage === "血液透析") ? 1500 : Math.round(ref*30);
+  return {bmi:Math.round(bmi*10)/10, std:Math.round(std*10)/10, ref:Math.round(ref*10)/10, energy, protein, sodium, potassium, phosphorus, calcium, iron, water, coeff};
+}
+
+function renderProfileTargets(){
+  const box = el("profileTargets");
+  const h = el("pf-height").value.trim();
+  const w = el("pf-weight").value.trim();
+  if(!h || !w){
+    box.innerHTML = `<div class="target-preview empty-preview">填写身高、体重后，这里会显示每日参考摄入量。</div>`;
+    return;
+  }
+  const indicators = {};
+  INDICATORS.forEach(([id])=>{ indicators[id] = el("ind-"+id).value; });
+  const t = computeTargets({
+    height: h,
+    weight: w,
+    activity: el("pf-activity").value,
+    gender: el("pf-gender").value,
+    stage: el("pf-stage").value,
+    indicators
+  });
+  box.innerHTML = `
+    <div class="target-preview">
+      <div class="preview-head">每日参考摄入量 <span class="pill warn">仅供参考，请遵医嘱</span></div>
+      <div class="preview-grid">
+        <div class="preview-item"><span>能量</span><strong>${t.energy}<small>kcal</small></strong></div>
+        <div class="preview-item"><span>蛋白质</span><strong>${t.protein}<small>g</small></strong></div>
+        <div class="preview-item"><span>钠</span><strong>${t.sodium}<small>mg</small></strong></div>
+        <div class="preview-item"><span>钾</span><strong>${t.potassium}<small>mg</small></strong></div>
+        <div class="preview-item"><span>磷</span><strong>${t.phosphorus}<small>mg</small></strong></div>
+        <div class="preview-item"><span>钙</span><strong>${t.calcium}<small>mg</small></strong></div>
+        <div class="preview-item"><span>铁</span><strong>${t.iron}<small>mg</small></strong></div>
+        <div class="preview-item"><span>水</span><strong>${t.water}<small>ml</small></strong></div>
+      </div>
+    </div>`;
+}
+
+function planTotals(){
+  const totals = {energy:0, protein:0, sodium:0, potassium:0, phosphorus:0, calcium:0, iron:0, water:0};
+  Object.values(plan).forEach(id=>{
+    const r = RECIPES.find(x=>x.id===Number(id));
+    if(!r) return;
+    totals.energy += r.nutrition.energy;
+    totals.protein += r.nutrition.protein;
+    totals.sodium += r.nutrition.sodium;
+    totals.potassium += r.nutrition.potassium;
+    totals.phosphorus += r.nutrition.phosphorus;
+    totals.calcium += r.nutrition.calcium;
+    totals.iron += r.nutrition.iron;
+    totals.water += r.nutrition.water;
+  });
+  return totals;
+}
+
+function renderPlan(){
+  const box = el("planContent");
+  if(!profile || !profile.height || !profile.weight){
+    box.innerHTML = `<div class="empty"><p style="margin:0 0 14px">请先在档案中填写身高、体重和体力活动。</p><button class="btn" data-view="profile">去填写档案</button></div>`;
+    return;
+  }
+  const t = computeTargets(profile);
+  const totals = planTotals();
+  const cands = recommend(profile);
+  const targetCards = [
+    ["能量", t.energy, "kcal", "按参考体重和活动量估算"],
+    ["蛋白质", t.protein, "g", "按分期系数 "+t.coeff+" g/kg 估算"],
+    ["钠", t.sodium, "mg", t.sodium===1500 ? "血钠偏高，参考值收紧" : "参考每日食盐不超过5g"],
+    ["钾", t.potassium, "mg", t.potassium===2000 ? "血钾偏高，参考值收紧" : "一般参考范围"],
+    ["磷", t.phosphorus, "mg", t.phosphorus===700 ? "血磷偏高，参考值收紧" : "一般参考范围"],
+    ["钙", t.calcium, "mg", "成人参考值约800mg"],
+    ["铁", t.iron, "mg", profile.gender === "女" ? "女性参考约20mg" : "男性参考约12mg"],
+    ["水", t.water, "ml", (profile.stage === "腹膜透析" || profile.stage === "血液透析") ? "量出为入，以医嘱为准" : "按参考体重估算，含食物含水"]
+  ].map(([label,val,unit,note])=>`
+    <div class="target-card">
+      <div class="t-label">${label}</div>
+      <div class="t-value">${val}<span class="t-unit">${unit}</span></div>
+      <div class="t-note">${note}</div>
+    </div>`).join("");
+  const mealSlots = Object.keys(MEAL_LABELS).map(meal=>{
+    const label = MEAL_LABELS[meal];
+    const id = plan[meal];
+    const r = id ? RECIPES.find(x=>x.id===Number(id)) : null;
+    const pool = cands.filter(x=>x.meal===label);
+    const options = (pool.length ? pool : cands).map(x=>`<option value="${x.id}" ${String(x.id)===String(id)?"selected":""}>${x.name}</option>`).join("");
+    return `
+      <div class="meal-slot">
+        <div class="meal-head">
+          <span class="meal-name">${label}</span>
+          <button class="btn danger sm" data-remove-plan="${meal}" ${r?"":"disabled"}>移除</button>
+        </div>
+        <div class="meal-recipe">${r ? r.name + " · " + r.time : "未选择"}</div>
+        <select data-meal-select="${meal}"><option value="">选择菜谱</option>${options}</select>
+      </div>`;
+  }).join("");
+  const rows = [
+    ["能量", totals.energy, t.energy, "kcal"],
+    ["蛋白质", totals.protein, t.protein, "g"],
+    ["钠", totals.sodium, t.sodium, "mg"],
+    ["钾", totals.potassium, t.potassium, "mg"],
+    ["磷", totals.phosphorus, t.phosphorus, "mg"],
+    ["钙", totals.calcium, t.calcium, "mg"],
+    ["铁", totals.iron, t.iron, "mg"],
+    ["水", totals.water, t.water, "ml"]
+  ].map(([label, cur, target, unit])=>{
+    const pct = target ? Math.min(100, Math.round(cur/target*100)) : 0;
+    const cls = cur > target*1.2 ? "over" : (cur > target ? "warn" : "");
+    return `
+      <div class="totals-row">
+        <span>${label}</span>
+        <div class="bar"><div class="bar-fill ${cls}" style="width:${pct}%"></div></div>
+        <div class="totals-num">${Math.round(cur)} / ${target} ${unit}</div>
+      </div>`;
+  }).join("");
+  box.innerHTML = `
+    <div class="info-note" style="margin-bottom:14px">仅供参考，请遵医嘱：蛋白质按分期系数，钠、钾、磷、钙、铁为参考值；水按“量出为入”估算，食物中的水计入每日总量；具体以医生和营养师建议为准。</div>
+    <div class="target-grid">${targetCards}</div>
+    <div class="plan-tools">
+      <button class="btn" data-auto-plan="1">智能配餐</button>
+      <button class="btn secondary" data-clear-plan="1">清空计划</button>
+    </div>
+    <div class="meal-grid">${mealSlots}</div>
+    <div class="plan-totals">
+      <h3>今日累计营养对照</h3>
+      ${rows}
+    </div>`;
+}
+
+function addToPlan(meal, id){
+  if(!meal) return;
+  if(!id){ removeFromPlan(meal); return; }
+  plan[meal] = id;
+  LS.set("ys_plan", plan);
+  renderPlan();
+}
+
+function removeFromPlan(meal){
+  plan[meal] = null;
+  LS.set("ys_plan", plan);
+  renderPlan();
+}
+
+function autoPlan(){
+  if(!profile || !profile.height || !profile.weight) return;
+  const cands = recommend(profile);
+  const tmp = {breakfast:null, lunch:null, dinner:null, snack:null};
+  const totals = {energy:0, protein:0, sodium:0, potassium:0, phosphorus:0};
+  const t = computeTargets(profile);
+  Object.keys(MEAL_LABELS).forEach(meal=>{
+    const label = MEAL_LABELS[meal];
+    let pool = cands.filter(r=>r.meal===label);
+    if(!pool.length) pool = cands;
+    let best = null, bestPenalty = Infinity;
+    pool.forEach(r=>{
+      const n = r.nutrition;
+      const penalty =
+        Math.max(0,(totals.energy+n.energy-t.energy)/t.energy) +
+        Math.max(0,(totals.protein+n.protein-t.protein)/t.protein) +
+        Math.max(0,(totals.sodium+n.sodium-t.sodium)/t.sodium) +
+        Math.max(0,(totals.potassium+n.potassium-t.potassium)/t.potassium) +
+        Math.max(0,(totals.phosphorus+n.phosphorus-t.phosphorus)/t.phosphorus) - r.score/1000;
+      if(penalty < bestPenalty){ best = r; bestPenalty = penalty; }
+    });
+    if(best){
+      tmp[meal] = best.id;
+      totals.energy += best.nutrition.energy;
+      totals.protein += best.nutrition.protein;
+      totals.sodium += best.nutrition.sodium;
+      totals.potassium += best.nutrition.potassium;
+      totals.phosphorus += best.nutrition.phosphorus;
+    }
+  });
+  plan = tmp;
+  LS.set("ys_plan", plan);
+  renderPlan();
+}
+
+function renderTimeInputs(){
+  const box = el("rm-times");
+  box.innerHTML = selectedTimes.map((t,i)=>`
+    <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px">
+      <input type="time" class="rm-time" data-tidx="${i}" value="${t}" style="flex:1">
+      <button type="button" class="btn danger sm" data-remove-time="${i}">删除</button>
+    </div>`).join("");
+  el("addTimeBtn").disabled = selectedTimes.length >= 5;
+  el("addTimeBtn").textContent = selectedTimes.length >= 5 ? "最多5个时间点" : "添加时间点";
+}
+
+function toggleRepeatWraps(){
+  const repeat = el("rm-repeat").value;
+  el("rm-days-wrap").style.display = repeat === "weekly" ? "" : "none";
+  el("rm-mday-wrap").style.display = repeat === "monthly" ? "" : "none";
+}
+
+function addReminder(e){
+  e.preventDefault();
+  const name = el("rm-name").value.trim();
+  if(!name){ el("rm-name").focus(); return; }
+  const times = selectedTimes.filter(Boolean).slice(0,5);
+  if(!times.length){ alert("请至少设置一个时间点"); return; }
+  const repeat = el("rm-repeat").value;
+  if(repeat === "weekly" && !selectedDays.size){ alert("请至少选择一天"); return; }
+  const dayOfMonth = repeat === "monthly" ? Math.min(31, Math.max(1, Number(el("rm-mday").value) || 1)) : 1;
+  reminders.push({
+    id: Date.now(),
+    name,
+    type: el("rm-type").value,
+    times,
+    repeat,
+    days: [...selectedDays],
+    dayOfMonth
+  });
+  LS.set("ys_reminders", reminders);
+  el("rm-name").value = "";
+  selectedTimes = ["08:00"];
+  renderTimeInputs();
+  renderReminders();
+}
+
+function deleteReminder(id){
+  reminders = reminders.filter(r=>r.id!==Number(id));
+  LS.set("ys_reminders", reminders);
+  renderReminders();
+}
+
+function pad(n){ return String(n).padStart(2,"0"); }
+
+function exportIcs(){
+  if(!reminders.length){ alert("还没有提醒可导出"); return; }
+  const now = new Date();
+  const ymd = now.getFullYear()+pad(now.getMonth()+1)+pad(now.getDate());
+  const stamp = ymd+"T"+pad(now.getHours())+pad(now.getMinutes())+pad(now.getSeconds());
+  const dayLetters = {0:"SU",1:"MO",2:"TU",3:"WE",4:"TH",5:"FR",6:"SA"};
+  let ics = "BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//Renyou//CN\r\n";
+  reminders.map(normalizeReminder).forEach(r=>{
+    r.times.forEach((tm,j)=>{
+      const [h,m] = tm.split(":").map(Number);
+      const endM = m+5;
+      const endH = h + Math.floor(endM/60);
+      const mm = endM%60;
+      let rrule = "";
+      if(r.repeat === "daily") rrule = "RRULE:FREQ=DAILY\r\n";
+      else if(r.repeat === "monthly") rrule = "RRULE:FREQ=MONTHLY;BYMONTHDAY="+r.dayOfMonth+"\r\n";
+      else {
+        const byday = [...r.days].sort((a,b)=>a-b).map(d=>dayLetters[d]).join(",");
+        if(byday) rrule = "RRULE:FREQ=WEEKLY;BYDAY="+byday+"\r\n";
+      }
+      ics += "BEGIN:VEVENT\r\n";
+      ics += "UID:"+r.id+"-"+j+"-renyou\r\n";
+      ics += "DTSTAMP:"+stamp+"Z\r\n";
+      ics += "DTSTART:"+ymd+"T"+pad(h)+pad(m)+"00\r\n";
+      ics += "DTEND:"+ymd+"T"+pad(endH)+pad(mm)+"00\r\n";
+      ics += rrule;
+      ics += "SUMMARY:"+r.name+"\r\n";
+      ics += "END:VEVENT\r\n";
+    });
+  });
+  ics += "END:VCALENDAR";
+  const blob = new Blob([ics], {type:"text/calendar"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "肾友食养提醒.ics";
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+
+document.addEventListener("click", e=>{
+  const viewBtn = e.target.closest("[data-view]");
+  if(viewBtn){ showView(viewBtn.getAttribute("data-view")); return; }
+  const openBtn = e.target.closest("[data-open]");
+  if(openBtn){ openRecipe(openBtn.getAttribute("data-open")); return; }
+  const favBtn = e.target.closest("[data-fav]");
+  if(favBtn){ toggleFav(favBtn.getAttribute("data-fav")); return; }
+  const delBtn = e.target.closest("[data-del]");
+  if(delBtn){ deleteReminder(delBtn.getAttribute("data-del")); return; }
+  const addTimeBtn = e.target.closest("#addTimeBtn");
+  if(addTimeBtn){
+    if(selectedTimes.length < 5){ selectedTimes.push("08:00"); renderTimeInputs(); }
+    return;
+  }
+  const removeTimeBtn = e.target.closest("[data-remove-time]");
+  if(removeTimeBtn){
+    const i = Number(removeTimeBtn.getAttribute("data-remove-time"));
+    if(selectedTimes.length > 1){ selectedTimes.splice(i,1); renderTimeInputs(); }
+    return;
+  }
+  const addPlanBtn = e.target.closest("[data-add-plan]");
+  if(addPlanBtn){
+    const meal = el("planMealSelect") ? el("planMealSelect").value : "lunch";
+    addToPlan(meal, addPlanBtn.getAttribute("data-add-plan"));
+    const msg = el("planAddedMsg");
+    if(msg){ msg.style.display = "inline"; msg.textContent = "已加入今日计划"; }
+    return;
+  }
+  const removePlanBtn = e.target.closest("[data-remove-plan]");
+  if(removePlanBtn){ removeFromPlan(removePlanBtn.getAttribute("data-remove-plan")); return; }
+  const autoBtn = e.target.closest("[data-auto-plan]");
+  if(autoBtn){ autoPlan(); return; }
+  const clearBtn = e.target.closest("[data-clear-plan]");
+  if(clearBtn){
+    plan = {breakfast:null, lunch:null, dinner:null, snack:null};
+    LS.set("ys_plan", plan);
+    renderPlan();
+    return;
+  }
+  const ingBtn = e.target.closest("[data-ing]");
+  if(ingBtn){
+    const n = ingBtn.getAttribute("data-ing");
+    if(selectedIngredients.has(n)) selectedIngredients.delete(n);
+    else selectedIngredients.add(n);
+    markIngChips();
+    return;
+  }
+  const dayBtn = e.target.closest("[data-day]");
+  if(dayBtn){
+    const d = Number(dayBtn.getAttribute("data-day"));
+    if(selectedDays.has(d)) selectedDays.delete(d);
+    else selectedDays.add(d);
+    markDayChips();
+  }
+});
+
+document.addEventListener("change", e=>{
+  const sel = e.target.closest("[data-meal-select]");
+  if(sel){ addToPlan(sel.getAttribute("data-meal-select"), sel.value); return; }
+  const repSel = e.target.closest("#rm-repeat");
+  if(repSel){ toggleRepeatWraps(); return; }
+  const timeInput = e.target.closest(".rm-time");
+  if(timeInput){
+    const i = Number(timeInput.getAttribute("data-tidx"));
+    if(i >= 0) selectedTimes[i] = timeInput.value;
+  }
+});
+
+el("consentBtn").addEventListener("click", ()=>{
+  LS.set("ys_consent", true);
+  el("overlay").classList.add("hidden");
+});
+el("profileForm").addEventListener("submit", e=>{ e.preventDefault(); saveProfileFromForm(); });
+el("profileForm").addEventListener("input", e=>{
+  if(e.target.matches("#pf-height, #pf-weight")) normalizeDecimalInput(e.target.id);
+  if(e.target.matches("#pf-height, #pf-weight, #pf-activity, #pf-gender, #pf-stage, [id^=ind-]")) renderProfileTargets();
+});
+el("profileForm").addEventListener("change", e=>{
+  if(e.target.matches("#pf-height, #pf-weight")) normalizeDecimalInput(e.target.id);
+  if(e.target.matches("#pf-activity, #pf-gender, #pf-stage, [id^=ind-]")) renderProfileTargets();
+});
+el("remindForm").addEventListener("submit", addReminder);
+el("exportIcs").addEventListener("click", exportIcs);
+el("ingSearch").addEventListener("input", e=>{ renderIngChips(e.target.value.trim()); });
+
+initProfileForm();
+renderTimeInputs();
+toggleRepeatWraps();
+if(!LS.get("ys_consent", false)) el("overlay").classList.remove("hidden");
+else el("overlay").classList.add("hidden");
+showView(profile ? "rec" : "profile");
+</script>
+</body>
+</html>
