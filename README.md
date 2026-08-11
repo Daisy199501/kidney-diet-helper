@@ -45,3 +45,11 @@ python -m http.server 8000
 ## 部署
 
 当前版本为纯静态站点，可直接托管到 GitHub Pages / Cloudflare Pages / Netlify 等静态托管平台。
+
+### 当前线上地址
+
+- 仓库：https://github.com/Daisy199501/kidney-diet-helper
+- GitHub Pages：https://daisy199501.github.io/kidney-diet-helper/
+- 大陆网络访问 github.io 可能不稳定，可改用 `部署包/肾友食养助手-静态站.zip` 上传至腾讯云/阿里云等国内托管平台。
+
+更新线上版本只需推送 `main` 分支，GitHub Actions/Pages 会自动重新构建。
