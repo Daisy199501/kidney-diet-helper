@@ -65,12 +65,23 @@ async function main() {
     await fillProfile(page, { region: '华北', stage: 'CKD 3-5期非透析', height: '170', weight: '60', gender: '男', activity: '轻体力', potassium: '偏高', phosphorus: '偏高' });
     const count = await page.locator('#recContent .recipe-card').count();
     ok('用例1 推荐列表非空', count > 0, 'count=' + count);
-    const allOk = await page.evaluate(() => {
+    const info = await page.evaluate(() => {
       const p = JSON.parse(localStorage.getItem('ys_profile'));
       const list = recommend(p);
-      return { n: list.length, all: list.every(r => r.flags.includes('lowK') && r.flags.includes('lowP')) };
+      return {
+        n: list.length,
+        noHigh: list.every(r => !r.flags.includes('highK') && !r.flags.includes('highP')),
+        topLowBoth: !!(list[0] && list[0].flags.includes('lowK') && list[0].flags.includes('lowP'))
+      };
     });
-    ok('用例1 全部结果均为低钾+低磷', allOk.all, 'n=' + allOk.n);
+    ok('用例1 双高患者可用菜谱≥60道', info.n >= 60, 'n=' + info.n);
+    ok('用例1 不含高钾/高磷菜谱', info.noHigh);
+    ok('用例1 排序优先低钾+低磷', info.topLowBoth);
+    const headers = await page.locator('#recContent .group-title').allTextContents();
+    const seq = ['可直接做', '差 1–2 个食材', '需备齐更多食材'];
+    const present = seq.filter(k => headers.some(h => h.includes(k)));
+    const idxs = present.map(k => headers.findIndex(h => h.includes(k)));
+    ok('用例1 分组顺序：可直接做 > 差1-2 > 需备齐', idxs.every((v, i) => i === 0 || v > idxs[i - 1]), headers.join(' / '));
     ok('用例1 无控制台错误', page.__errors.length === 0, page.__errors.join(' | '));
     await page.screenshot({ path: SHOTS + 'use1-recommend-phone.png' });
     await page.close();
@@ -97,6 +108,42 @@ async function main() {
     ok('用例2 返回结果并带已匹配食材', match.n > 0 && match.hasPresent);
     ok('用例2 展示缺料提示', match.missingNote);
     await page.screenshot({ path: SHOTS + 'use2-ingredients-ipad.png' });
+    await page.close();
+  }
+
+  // ---------- 用例2b：替代食材匹配 ----------
+  {
+    const page = await newPage(browser, { width: 390, height: 844 });
+    await page.goto(BASE, { waitUntil: 'networkidle' });
+    await fillProfile(page, { region: '华北', stage: 'CKD 1-2期', height: '170', weight: '60', gender: '男', activity: '轻体力' });
+    await page.click('.tabbar [data-view="profile"]');
+    await page.waitForSelector('#view-profile.active');
+    await page.click('[data-ing="西葫芦"]');
+    await page.click('#profileForm button[type="submit"]');
+    await page.waitForSelector('#view-rec.active');
+    const info = await page.evaluate(() => {
+      const p = JSON.parse(localStorage.getItem('ys_profile'));
+      const list = recommend(p);
+      const withSub = list.filter(r => r.sub && r.sub.length > 0);
+      return { n: list.length, subCount: withSub.length, sample: withSub[0] ? withSub[0].name + ':' + withSub[0].sub.map(s => s.missing + '←' + s.use).join(',') : '' };
+    });
+    ok('用例2b 替代匹配：用西葫芦可替代的菜谱>0', info.subCount > 0, 'sub=' + info.subCount + ' ' + info.sample);
+    await page.close();
+  }
+
+  // ---------- 分组：可直接做排最前 ----------
+  {
+    const page = await newPage(browser, { width: 390, height: 844 });
+    await page.goto(BASE, { waitUntil: 'networkidle' });
+    await fillProfile(page, { region: '华北', stage: 'CKD 1-2期', height: '170', weight: '60', gender: '男', activity: '轻体力' });
+    await page.click('.tabbar [data-view="profile"]');
+    await page.waitForSelector('#view-profile.active');
+    for (const ing of ['黄瓜', '粉丝']) await page.click(`[data-ing="${ing}"]`);
+    await page.click('#profileForm button[type="submit"]');
+    await page.waitForSelector('#view-rec.active');
+    const first = await page.locator('#recContent .group-title').first().textContent();
+    ok('分组：可直接做排最前', first.includes('可直接做'), first);
+    await page.screenshot({ path: SHOTS + 'use2c-groups.png' });
     await page.close();
   }
 

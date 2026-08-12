@@ -70,6 +70,15 @@ main{padding-top:16px}
   border-radius:var(--radius);box-shadow:var(--shadow);
 }
 .section-title{font-size:16px;font-weight:700;margin:20px 0 10px}
+.group-title{
+  display:flex;align-items:center;gap:8px;
+  font-size:15px;font-weight:700;margin:18px 0 10px;color:var(--brand-dark);
+}
+.group-title:first-child{margin-top:4px}
+.group-count{
+  font-size:12px;font-weight:400;color:var(--muted);
+  background:var(--brand-soft);padding:2px 8px;border-radius:999px;
+}
 .summary-bar{
   display:flex;flex-wrap:wrap;gap:8px;align-items:center;
   background:var(--surface);border:1px solid var(--line);
@@ -474,7 +483,28 @@ const INDICATORS = [
   ["albumin","白蛋白"],["hemoglobin","血红蛋白"],["uric","尿酸"]
 ];
 const STATUSES = ["不关注","正常","偏高","偏低"];
-const INGREDIENTS = ["土豆","茄子","鸡蛋","西红柿","西葫芦","冬瓜","豆腐","白菜","胡萝卜","西兰花","南瓜","小米","黄瓜","粉丝","山药","排骨","鲈鱼","苦瓜","虾仁","丝瓜","青椒","小葱","蒜","姜","菠菜","芹菜","莴笋","莲藕","木耳","香菇","平菇","金针菇","豆角","荷兰豆","玉米","大米","燕麦","鸡胸肉","瘦肉","牛肉","羊肉","鸭肉","草鱼","带鱼","鳕鱼","海带","紫菜","洋葱","白萝卜","红薯","芋头","上海青","油菜","生菜","圆白菜","佛手瓜","芦笋","秋葵","红萝卜","韭菜","花菜","豆腐干","鸡腿","银耳","百合","荞麦"];
+const INGREDIENTS = ["土豆","茄子","鸡蛋","西红柿","西葫芦","冬瓜","豆腐","白菜","胡萝卜","西兰花","南瓜","小米","黄瓜","粉丝","山药","排骨","鲈鱼","苦瓜","虾仁","丝瓜","青椒","小葱","蒜","姜","菠菜","芹菜","莴笋","莲藕","木耳","香菇","平菇","金针菇","豆角","荷兰豆","玉米","大米","燕麦","鸡胸肉","瘦肉","牛肉","羊肉","鸭肉","草鱼","带鱼","鳕鱼","海带","紫菜","洋葱","白萝卜","红薯","芋头","上海青","油菜","生菜","圆白菜","佛手瓜","芦笋","秋葵","红萝卜","韭菜","花菜","豆腐干","鸡腿","银耳","百合","荞麦","面粉","香菜","枸杞"];
+
+// 调味料不计入“现有食材”匹配；别名用于食材名统一（如 大白菜=白菜）
+const CONDIMENTS = new Set(["食用油","香油","醋","生抽","蒸鱼豉油","清水","温水"]);
+const ING_ALIAS = {"大白菜":"白菜","北豆腐":"豆腐","鲜虾仁":"虾仁","鸡腿肉":"鸡腿","娃娃菜":"白菜","菜花":"花菜","冬瓜瓤":"冬瓜","瘦肉末":"瘦肉","牛腩":"牛肉","玉米粉":"面粉"};
+function normIng(n){ return ING_ALIAS[n] || n; }
+
+// 从“A可用B替换”提取菜谱的替代食材（如“西红柿可用西葫芦替换”）
+function subMatchesFor(r, userIngs){
+  const res = [];
+  const re = /(.+?)可用(.+?)替换/g;
+  let m;
+  while((m = re.exec(r.substitutes || ""))){
+    let a = normIng(m[1].trim());
+    let b = normIng(m[2].trim().replace(/等量$/,"").replace(/瓤$/,"").replace(/末$/,"").replace(/少量$/,""));
+    if(CONDIMENTS.has(a)) continue;
+    if(userIngs.has(b) && r.ingredients.some(([n])=>normIng(n)===a) && !res.some(x=>x.missing===a)){
+      res.push({missing:a, use:b});
+    }
+  }
+  return res;
+}
 
 
 
@@ -596,50 +626,61 @@ function saveProfileFromForm(){
 }
 
 function recommend(profile){
-  const hard = [];
   const prefer = [];
-  if(profile.indicators.potassium === "偏高") hard.push("lowK");
-  if(profile.indicators.phosphorus === "偏高") hard.push("lowP");
-  if(profile.indicators.sodium === "偏高") hard.push("lowNa");
-  if(profile.indicators.uric === "偏高") hard.push("lowPurine");
+  const exclude = [];
+  if(profile.indicators.potassium === "偏高"){ exclude.push("highK"); prefer.push("lowK"); }
+  if(profile.indicators.phosphorus === "偏高"){ exclude.push("highP"); prefer.push("lowP"); }
+  if(profile.indicators.sodium === "偏高") prefer.push("lowNa");
+  if(profile.indicators.uric === "偏高") prefer.push("lowPurine");
   if(profile.indicators.albumin === "偏低") prefer.push("goodProtein");
   if(profile.indicators.hemoglobin === "偏低") prefer.push("ironRich");
 
-  const userIngs = new Set(profile.ingredients);
-  const hardReason = {
+  const userIngs = new Set((profile.ingredients||[]).map(normIng));
+  const preferScore = {lowK:25, lowP:25, lowNa:20, lowPurine:20, goodProtein:10, ironRich:10};
+  const preferReason = {
     lowK:"血钾偏高，本菜为低钾选择",
     lowP:"血磷偏高，本菜为低磷选择",
     lowNa:"血钠/血压需控制，本菜为低钠选择",
-    lowPurine:"尿酸偏高，本菜嘌呤较低"
-  };
-  const preferReason = {
+    lowPurine:"尿酸偏高，本菜嘌呤较低",
     goodProtein:"含优质蛋白，适合当前白蛋白水平",
     ironRich:"含铁较丰富，供参考"
   };
 
-  return RECIPES.filter(r=>{
+  const list = RECIPES.filter(r=>{
     if(!r.stages.includes("all") && !r.stages.includes(profile.stage)) return false;
-    return hard.every(f=>r.flags.includes(f));
+    if(exclude.some(f=>r.flags.includes(f))) return false;
+    return true;
   }).map(r=>{
-    const present = r.ingredients.filter(([n])=>userIngs.has(n));
-    const missing = r.ingredients.filter(([n])=>!userIngs.has(n));
+    const countable = r.ingredients.map(([n])=>normIng(n)).filter(n=>!CONDIMENTS.has(n));
+    const present = countable.filter(n=>userIngs.has(n));
+    const subUsed = subMatchesFor(r, userIngs).filter(s=>!present.includes(s.missing));
+    const covered = new Set([...present, ...subUsed.map(s=>s.missing)]);
+    const missing = countable.filter(n=>!covered.has(n));
     let score = 0;
-    if(r.region === profile.region) score += 20;
-    score += Math.round(40 * present.length / r.ingredients.length);
-    if(hard.every(f=>r.flags.includes(f))) score += 30;
-    if(prefer.every(f=>r.flags.includes(f))) score += 10;
+    if(r.region === profile.region) score += 10;
+    prefer.forEach(f=>{ if(r.flags.includes(f)) score += preferScore[f]; });
+    score += Math.round(30 * covered.size / Math.max(1, countable.length));
+    score += subUsed.length * 3;
     const reasons = [];
-    hard.forEach(f=>{ if(r.flags.includes(f)) reasons.push(hardReason[f]); });
     prefer.forEach(f=>{ if(r.flags.includes(f)) reasons.push(preferReason[f]); });
     if(r.region === profile.region) reasons.push(r.region+"地区家常做法");
-    if(present.length) reasons.push("已匹配食材 "+present.length+"/"+r.ingredients.length);
+    if(covered.size) reasons.push("已匹配食材 "+covered.size+"/"+countable.length + (subUsed.length?`（含 ${subUsed.length} 种替代）`:""));
     else reasons.push("需准备全部食材");
-    return {...r, present, missing, score:Math.min(100,score), reasons};
-  }).sort((a,b)=>b.score-a.score);
+    const warnings = [];
+    if(profile.indicators.potassium === "偏高" && !r.flags.includes("lowK") && !r.flags.includes("highK")) warnings.push("钾中等：先焯水、控份量");
+    if(profile.indicators.phosphorus === "偏高" && !r.flags.includes("lowP") && !r.flags.includes("highP")) warnings.push("磷中等：先焯水、控份量");
+    if(profile.indicators.sodium === "偏高" && !r.flags.includes("lowNa")) warnings.push("钠较高：注意调味");
+    const group = covered.size === countable.length ? "ready" : (missing.length <= 2 ? "near" : "far");
+    return {...r, present, missing, sub:subUsed, score:Math.min(100,score), reasons, warnings, group};
+  });
+  const order = {ready:0, near:1, far:2};
+  return list.sort((a,b)=> order[a.group]-order[b.group] || b.score-a.score);
 }
 
 function recipeCardHtml(r){
   const fav = favs.includes(r.id);
+  const warnPills = (r.warnings||[]).map(w=>`<span class="pill warn">${w}</span>`).join("");
+  const missingTxt = (r.missing||[]).length ? `缺：${r.missing.slice(0,3).join("、")}${r.missing.length>3?" 等":""}` : "";
   return `
     <article class="card recipe-card" data-open="${r.id}">
       <div class="recipe-head">
@@ -651,10 +692,10 @@ function recipeCardHtml(r){
         </div>
         <div class="score">${r.score}%</div>
       </div>
-      <div class="meta">${r.tags.map(t=>`<span class="pill ${t.includes("慎")?"warn":"green"}">${t}</span>`).join("")}</div>
+      <div class="meta">${r.tags.map(t=>`<span class="pill ${t.includes("慎")?"warn":"green"}">${t}</span>`).join("")}${warnPills}</div>
       <div class="recipe-ing">${r.ingredients.map(i=>i[0]).join("、")}</div>
-      <div class="reasons">${r.reasons.slice(0,2).map(x=>`<div>${x}</div>`).join("")}</div>
-      ${(r.missing||[]).length ? `<div class="missing">缺：${r.missing.slice(0,3).map(i=>i[0]).join("、")}${r.missing.length>3?" 等":""}</div>` : ""}
+      <div class="reasons">${r.reasons.slice(0,3).map(x=>`<div>${x}</div>`).join("")}</div>
+      ${missingTxt ? `<div class="missing">${missingTxt}</div>` : ""}
       <div class="actions">
         <button class="btn secondary sm" data-open="${r.id}">查看做法</button>
         <button class="btn ghost sm ${fav?"fav-on":""}" data-fav="${r.id}">${fav?"已收藏":"收藏"}</button>
@@ -683,14 +724,29 @@ function renderRec(){
     box.innerHTML = summary + search + `<div class="empty"><p style="margin:0 0 12px">没有符合当前指标和分期的菜谱，可放宽“偏高”指标或修改分期。</p><button class="btn secondary" data-view="profile">调整档案</button></div>`;
     return;
   }
-  box.innerHTML = summary + search + `<div class="recipe-grid">${list.map(recipeCardHtml).join("")}</div>`;
+  const groups = [
+    ["ready", "可直接做"],
+    ["near", "差 1–2 个食材"],
+    ["far", "需备齐更多食材"]
+  ];
+  const groupedHtml = groups.map(([key,label])=>{
+    const items = list.filter(r=>r.group===key);
+    if(!items.length) return "";
+    return `<h3 class="group-title">${label}<span class="group-count">${items.length} 道</span></h3><div class="recipe-grid">${items.map(recipeCardHtml).join("")}</div>`;
+  }).join("");
+  box.innerHTML = summary + search + groupedHtml;
   const searchBox = el("recSearch");
   if(searchBox){
     searchBox.addEventListener("input", e=>{
       const kw = e.target.value.trim();
       const filtered = kw ? list.filter(r=>r.name.includes(kw)) : list;
-      const grid = document.querySelector("#view-rec .recipe-grid");
-      if(grid) grid.innerHTML = filtered.map(recipeCardHtml).join("");
+      if(kw){
+        const grid = document.querySelector("#view-rec .recipe-grid");
+        if(grid) grid.innerHTML = filtered.map(recipeCardHtml).join("");
+      } else {
+        const box2 = el("recContent");
+        box2.innerHTML = summary + search + groupedHtml;
+      }
     });
   }
 }
