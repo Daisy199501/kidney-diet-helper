@@ -168,6 +168,17 @@ select,input[type=text],input[type=time],input[type=search]{
 .nutri-table{width:100%;border-collapse:collapse;font-size:13px}
 .nutri-table td{padding:7px 0;border-bottom:1px solid var(--line)}
 .nutri-table td:last-child{text-align:right;font-weight:600}
+.nutri-table td.pct{text-align:center;font-weight:600;white-space:nowrap}
+.nutri-table th{
+  padding:7px 0;border-bottom:2px solid var(--line);
+  text-align:left;font-size:12px;color:var(--muted);font-weight:600;
+}
+.nutri-table th:nth-child(3),.nutri-table th:nth-child(4){text-align:center}
+.level-badge{display:inline-block;padding:1px 8px;border-radius:999px;font-size:11px;font-weight:600;white-space:nowrap}
+.level-badge.low{background:#eef1ee;color:var(--muted)}
+.level-badge.mid{background:var(--brand-soft);color:var(--brand-dark)}
+.level-badge.high{background:var(--danger-soft);color:var(--danger)}
+.level-badge.na{background:var(--info-soft);color:var(--info)}
 .notice{
   background:var(--accent-soft);border:1px solid #ecd3c2;color:#7c4526;
   border-radius:var(--radius);padding:12px;font-size:13px;
@@ -775,10 +786,29 @@ function openRecipe(id){
       <div class="panel">
         <h3>营养估算（参考）</h3>
         <table class="nutri-table">
-          ${[["能量",""+r.nutrition.energy+" kcal"],["蛋白质",""+r.nutrition.protein+" g"],["脂肪",""+r.nutrition.fat+" g"],["碳水",""+r.nutrition.carb+" g"],["钠",""+r.nutrition.sodium+" mg"],["钾",""+r.nutrition.potassium+" mg"],["磷",""+r.nutrition.phosphorus+" mg"],["钙",""+r.nutrition.calcium+" mg"],["铁",""+r.nutrition.iron+" mg"],["水",""+r.nutrition.water+" ml"]]
-            .map(([k,v])=>`<tr><td>${k}</td><td>${v}</td></tr>`).join("")}
+          <tr><th>营养素</th><th>含量</th><th>占每日参考</th><th>一餐判定</th></tr>
+          ${(()=>{
+            const t = mealTargets(profile);
+            const n = r.nutrition;
+            return [
+              ["能量", n.energy, t.energy, "kcal"],
+              ["蛋白质", n.protein, t.protein, "g"],
+              ["脂肪", n.fat, t.fat, "g"],
+              ["碳水", n.carb, t.carb, "g"],
+              ["钠", n.sodium, t.sodium, "mg"],
+              ["钾", n.potassium, t.potassium, "mg"],
+              ["磷", n.phosphorus, t.phosphorus, "mg"],
+              ["钙", n.calcium, t.calcium, "mg"],
+              ["铁", n.iron, t.iron, "mg"],
+              ["水", n.water, t.water, "ml"]
+            ].map(([label,val,target,unit])=>{
+              const pct = target ? Math.round(val/target*100) : null;
+              const lv = mealLevel(pct);
+              return `<tr><td>${label}</td><td>${val} ${unit}</td><td class="pct">${pct===null?"—":pct+"%"}</td><td><span class="level-badge ${lv.cls}">${lv.label}</span></td></tr>`;
+            }).join("");
+          })()}
         </table>
-        <div class="info-note" style="margin-top:10px">按《成人慢性肾脏病食养指南（2024年版）》附录1表1.1及中国食物成分表口径估算，仅供参考，请遵医嘱。</div>
+        <div class="info-note" style="margin-top:10px">${(()=>{const t=mealTargets(profile); return t.note;})()}。一餐判定按“一餐≈每日参考量1/3”估算：&lt;15% 偏低、15–33% 适中、&gt;33% 偏高；脂肪/碳水按供能比估算（脂肪约30%、碳水约55%）。数值仅供参考，请遵医嘱。</div>
       </div>
       <div class="panel" style="grid-column:1/-1">
         <h3>做法步骤</h3>
@@ -889,6 +919,33 @@ function computeTargets(p){
   // 指南：非透析 1.5～1.7L；透析按“量出为入”（0.5L+前1日尿量+透析脱水量），以医嘱为准
   const water = (p.stage === "腹膜透析" || p.stage === "血液透析") ? null : Math.min(1700, Math.max(1500, Math.round(ref*30)));
   return {bmi:Math.round(bmi*10)/10, std:Math.round(std*10)/10, ref:Math.round(ref*10)/10, energy, protein, sodium, potassium, phosphorus, calcium, iron, water, coeff};
+}
+
+// 菜谱营养“占每日参考量”的目标值：优先用档案分期与指标计算；无档案时用成人一般参考值
+function mealTargets(profile){
+  if(profile && Number(profile.height) && Number(profile.weight)){
+    const t = computeTargets(profile);
+    return {
+      energy:t.energy, protein:t.protein, sodium:t.sodium, potassium:t.potassium,
+      phosphorus:t.phosphorus, calcium:t.calcium, iron:t.iron, water:t.water,
+      fat:Math.round(t.energy*0.30/9), carb:Math.round(t.energy*0.55/4),
+      note:"占每日参考比例按你的档案（分期与指标）计算"
+    };
+  }
+  const energy = 2000;
+  return {
+    energy, protein:65, sodium:2000, potassium:2500, phosphorus:800, calcium:800, iron:12, water:1700,
+    fat:Math.round(energy*0.30/9), carb:Math.round(energy*0.55/4),
+    note:"未填写档案，按成人一般参考值估算（填写档案后更准确）"
+  };
+}
+
+// 一餐判定：按“一餐≈每日参考量1/3（33%）”估算
+function mealLevel(pct){
+  if(pct === null) return {label:"遵医嘱", cls:"na"};
+  if(pct < 15) return {label:"偏低", cls:"low"};
+  if(pct <= 33) return {label:"适中", cls:"mid"};
+  return {label:"偏高", cls:"high"};
 }
 
 function renderProfileTargets(){
