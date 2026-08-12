@@ -249,6 +249,8 @@ async function main() {
     ok('用例6 智能配餐四餐齐备', mealTexts.every(t => t && !t.includes('未选择')), mealTexts.join(' | '));
     const totals1 = await page.locator('.totals-row').allTextContents();
     ok('用例6 累计营养8行', totals1.length === 8);
+    ok('用例6 累计显示百分比', totals1.every(t => t.includes('%')), totals1.join(' | '));
+    ok('用例6 累计带判定标签', await page.locator('.totals-row .level-badge').count() >= 8);
     const sel = page.locator('.meal-slot:first-child [data-meal-select]');
     const curVal = await sel.inputValue();
     const opts = await sel.locator('option').all();
@@ -298,7 +300,11 @@ async function main() {
     const kRow = page.locator('.totals-row', { hasText: '钾' }).first();
     const hasOverClass = await kRow.evaluate(el => el.classList.contains('over'));
     const numColor = await kRow.locator('.totals-num').evaluate(el => getComputedStyle(el).color);
+    const kBadge = await kRow.locator('.level-badge').textContent();
+    const barColor = await kRow.locator('.bar-fill').evaluate(el => getComputedStyle(el).backgroundColor);
     ok('超标营养素红色高亮（钾行）', hasOverClass && overCount >= 1, `over=${overCount} color=${numColor}`);
+    ok('超标行标签为“偏高”', kBadge === '偏高', kBadge);
+    ok('超标时绿条变红条', barColor === 'rgb(177, 67, 67)', barColor);
     await page.screenshot({ path: SHOTS + 'use7-exceed-red.png' });
     await page.close();
   }

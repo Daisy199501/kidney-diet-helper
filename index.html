@@ -264,6 +264,7 @@ select,input[type=text],input[type=time],input[type=search]{
 .totals-num{text-align:right;color:var(--muted);font-size:12px;white-space:nowrap}
 .totals-row.over > span{color:var(--danger);font-weight:700}
 .totals-row.over .totals-num{color:var(--danger);font-weight:700}
+.totals-num .level-badge{margin-left:4px}
 select[data-meal-select]{margin-top:8px}
 @media(min-width:640px){
   .recipe-grid{grid-template-columns:repeat(2,1fr)}
@@ -1056,18 +1057,20 @@ function renderPlan(){
         <div class="bar"><div class="bar-fill" style="width:0%"></div></div>
         <div class="totals-num">${Math.round(cur)} / 遵医嘱</div>
       </div>`;
-    const pct = target ? Math.min(100, Math.round(cur/target*100)) : 0;
-    const exceeded = cur > target;
-    const cls = exceeded ? "over" : "";
+    const pct = Math.round(cur/target*100);
+    const barPct = Math.min(100, pct);
+    const exceeded = pct > 100;
+    const level = pct < 60 ? "low" : (pct <= 100 ? "mid" : "high");
+    const levelLabel = {low:"偏低", mid:"适中", high:"偏高"}[level];
     return `
       <div class="totals-row${exceeded ? " over" : ""}">
         <span>${label}${exceeded ? " ⚠" : ""}</span>
-        <div class="bar"><div class="bar-fill ${cls}" style="width:${pct}%"></div></div>
-        <div class="totals-num">${Math.round(cur)} / ${target} ${unit}</div>
+        <div class="bar"><div class="bar-fill ${exceeded ? "over" : ""}" style="width:${barPct}%"></div></div>
+        <div class="totals-num">${Math.round(cur)} / ${target} ${unit} · ${pct}% <span class="level-badge ${level}">${levelLabel}</span></div>
       </div>`;
   }).join("");
   box.innerHTML = `
-    <div class="info-note" style="margin-bottom:14px">仅供参考，请遵医嘱：蛋白质按分期系数，钠、钾、磷、钙、铁为参考值；水按“量出为入”估算，食物中的水计入每日总量；具体以医生和营养师建议为准。</div>
+    <div class="info-note" style="margin-bottom:14px">仅供参考，请遵医嘱：蛋白质按分期系数，钠、钾、磷、钙、铁为参考值；水按“量出为入”估算，食物中的水计入每日总量；累计营养判定：&lt;60% 偏低、60–100% 适中、&gt;100% 偏高（超出目标时绿条变红条）。具体以医生和营养师建议为准。</div>
     <div class="target-grid">${targetCards}</div>
     <div class="plan-tools">
       <button class="btn" data-auto-plan="1">智能配餐</button>
