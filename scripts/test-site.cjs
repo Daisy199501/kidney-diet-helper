@@ -58,6 +58,35 @@ async function main() {
     await page.close();
   }
 
+  // ---------- 数据合并与去重 ----------
+  {
+    const page = await newPage(browser, { width: 390, height: 844 });
+    await page.goto(BASE, { waitUntil: 'networkidle' });
+    const info = await page.evaluate(() => {
+      const base = n => n.replace(/（[^）]*）/g, '').trim();
+      const isVariant = n => ['低磷', '低盐', '低糖', '低嘌呤', '低蛋白', '补铁'].some(k => n.includes(k) && n.includes('（'));
+      const bases = RECIPES.map(r => base(r.name));
+      const news = RECIPES.filter(r => r.id >= 101);
+      return {
+        total: RECIPES.length,
+        uniqueIds: new Set(RECIPES.map(r => r.id)).size,
+        dupBases: RECIPES.filter((r, i) => bases.indexOf(base(r.name)) !== i && !isVariant(r.name)).map(r => r.name),
+        hasDialysisDish: RECIPES.some(r => r.name === '酸菜白肉炖粉条（低盐版）' && r.stages.includes('腹膜透析') && r.stages.includes('血液透析')),
+        hasSteamSweetPotato: RECIPES.some(r => r.name === '蒸红薯' && r.season === '四季'),
+        hasLowPSeaBass: RECIPES.some(r => r.name === '清蒸鲈鱼（低磷版）'),
+        newOk: news.every(r => r.nutrition && r.nutrition.energy > 0 && r.ingredients.length > 0)
+      };
+    });
+    ok('合并后共133道菜谱', info.total === 133, 'total=' + info.total);
+    ok('ID唯一', info.uniqueIds === info.total, 'ids=' + info.uniqueIds);
+    ok('无重名菜谱（去括号基名）', info.dupBases.length === 0, info.dupBases.join('、'));
+    ok('新增透析菜谱分期正确', info.hasDialysisDish);
+    ok('新增“四季”菜谱', info.hasSteamSweetPotato);
+    ok('保留“清蒸鲈鱼（低磷版）”变体', info.hasLowPSeaBass);
+    ok('新增菜谱营养与食材完整', info.newOk);
+    await page.close();
+  }
+
   // ---------- 用例1：按指标推荐（血钾/血磷偏高） ----------
   {
     const page = await newPage(browser, { width: 390, height: 844 });

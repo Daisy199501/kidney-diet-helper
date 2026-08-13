@@ -22,6 +22,27 @@ const INGREDIENT_DB = [
   "source": "guide-table1.1"
  },
  {
+  "name": "鸡肉",
+  "per100g": {
+   "energy": 169,
+   "protein": 20.3,
+   "fat": 9.4,
+   "carb": 0.9,
+   "sodium": 62.8,
+   "potassium": 249,
+   "phosphorus": 166,
+   "calcium": 9,
+   "iron": 1.4,
+   "water": 74
+  },
+  "level": {
+   "k": "中",
+   "p": "中",
+   "na": "低"
+  },
+  "source": "guide-table1.1"
+ },
+ {
   "name": "鸡胸肉",
   "per100g": {
    "energy": 146,
@@ -1466,6 +1487,636 @@ const INGREDIENT_DB = [
   "level": {
    "k": "高",
    "p": "高",
+   "na": "低"
+  },
+  "source": "cfct-estimate"
+ },
+ {
+  "name": "盐",
+  "per100g": {
+   "energy": 0,
+   "protein": 0.0,
+   "fat": 0.0,
+   "carb": 0.0,
+   "sodium": 39300.0,
+   "potassium": 0,
+   "phosphorus": 0,
+   "calcium": 0,
+   "iron": 0.0,
+   "water": 0
+  },
+  "level": {
+   "k": "低",
+   "p": "低",
+   "na": "高"
+  },
+  "source": "seasoning"
+ },
+ {
+  "name": "玉米淀粉",
+  "per100g": {
+   "energy": 353,
+   "protein": 1.2,
+   "fat": 0.1,
+   "carb": 86.9,
+   "sodium": 6.3,
+   "potassium": 8,
+   "phosphorus": 25,
+   "calcium": 18,
+   "iron": 0.6,
+   "water": 12
+  },
+  "level": {
+   "k": "低",
+   "p": "低",
+   "na": "低"
+  },
+  "source": "guide-table1.1"
+ },
+ {
+  "name": "小麦淀粉",
+  "per100g": {
+   "energy": 348,
+   "protein": 0.3,
+   "fat": 0.1,
+   "carb": 86.5,
+   "sodium": 5.0,
+   "potassium": 8,
+   "phosphorus": 25,
+   "calcium": 10,
+   "iron": 0.5,
+   "water": 12
+  },
+  "level": {
+   "k": "低",
+   "p": "低",
+   "na": "低"
+  },
+  "source": "cfct-estimate"
+ },
+ {
+  "name": "木耳干",
+  "per100g": {
+   "energy": 205,
+   "protein": 12.1,
+   "fat": 1.5,
+   "carb": 35.7,
+   "sodium": 48.5,
+   "potassium": 757,
+   "phosphorus": 292,
+   "calcium": 247,
+   "iron": 97.0,
+   "water": 15
+  },
+  "level": {
+   "k": "高",
+   "p": "高",
+   "na": "低"
+  },
+  "source": "guide-table1.1"
+ },
+ {
+  "name": "南豆腐",
+  "per100g": {
+   "energy": 57,
+   "protein": 6.2,
+   "fat": 2.5,
+   "carb": 2.4,
+   "sodium": 6.4,
+   "potassium": 120,
+   "phosphorus": 84,
+   "calcium": 116,
+   "iron": 1.5,
+   "water": 88
+  },
+  "level": {
+   "k": "低",
+   "p": "低",
+   "na": "低"
+  },
+  "source": "cfct-estimate"
+ },
+ {
+  "name": "五花肉",
+  "per100g": {
+   "energy": 348,
+   "protein": 7.7,
+   "fat": 35.3,
+   "carb": 0.0,
+   "sodium": 57.5,
+   "potassium": 218,
+   "phosphorus": 121,
+   "calcium": 6,
+   "iron": 1.4,
+   "water": 50
+  },
+  "level": {
+   "k": "中",
+   "p": "中",
+   "na": "低"
+  },
+  "source": "cfct-estimate"
+ },
+ {
+  "name": "酸菜",
+  "per100g": {
+   "energy": 23,
+   "protein": 1.1,
+   "fat": 0.2,
+   "carb": 4.2,
+   "sodium": 650.0,
+   "potassium": 130,
+   "phosphorus": 30,
+   "calcium": 50,
+   "iron": 1.0,
+   "water": 92
+  },
+  "level": {
+   "k": "低",
+   "p": "低",
+   "na": "高"
+  },
+  "source": "cfct-estimate"
+ },
+ {
+  "name": "荠菜",
+  "per100g": {
+   "energy": 34,
+   "protein": 2.9,
+   "fat": 0.4,
+   "carb": 4.7,
+   "sodium": 31.6,
+   "potassium": 280,
+   "phosphorus": 81,
+   "calcium": 294,
+   "iron": 5.4,
+   "water": 90
+  },
+  "level": {
+   "k": "高",
+   "p": "低",
+   "na": "低"
+  },
+  "source": "cfct-estimate"
+ },
+ {
+  "name": "薏苡仁",
+  "per100g": {
+   "energy": 365,
+   "protein": 12.8,
+   "fat": 3.3,
+   "carb": 71.1,
+   "sodium": 3.6,
+   "potassium": 238,
+   "phosphorus": 217,
+   "calcium": 42,
+   "iron": 3.6,
+   "water": 11
+  },
+  "level": {
+   "k": "中",
+   "p": "高",
+   "na": "低"
+  },
+  "source": "cfct-estimate"
+ },
+ {
+  "name": "绿豆",
+  "per100g": {
+   "energy": 342,
+   "protein": 21.6,
+   "fat": 0.8,
+   "carb": 62.0,
+   "sodium": 3.2,
+   "potassium": 787,
+   "phosphorus": 337,
+   "calcium": 81,
+   "iron": 6.5,
+   "water": 12
+  },
+  "level": {
+   "k": "高",
+   "p": "高",
+   "na": "低"
+  },
+  "source": "guide-table1.1"
+ },
+ {
+  "name": "大枣",
+  "per100g": {
+   "energy": 129,
+   "protein": 1.1,
+   "fat": 0.3,
+   "carb": 30.5,
+   "sodium": 6.2,
+   "potassium": 524,
+   "phosphorus": 51,
+   "calcium": 64,
+   "iron": 2.3,
+   "water": 67
+  },
+  "level": {
+   "k": "高",
+   "p": "低",
+   "na": "低"
+  },
+  "source": "cfct-estimate"
+ },
+ {
+  "name": "黑米",
+  "per100g": {
+   "energy": 349,
+   "protein": 9.4,
+   "fat": 2.5,
+   "carb": 72.2,
+   "sodium": 7.1,
+   "potassium": 256,
+   "phosphorus": 356,
+   "calcium": 12,
+   "iron": 1.6,
+   "water": 14
+  },
+  "level": {
+   "k": "高",
+   "p": "高",
+   "na": "低"
+  },
+  "source": "cfct-estimate"
+ },
+ {
+  "name": "莲子",
+  "per100g": {
+   "energy": 356,
+   "protein": 17.2,
+   "fat": 2.0,
+   "carb": 67.2,
+   "sodium": 5.1,
+   "potassium": 846,
+   "phosphorus": 550,
+   "calcium": 97,
+   "iron": 3.6,
+   "water": 10
+  },
+  "level": {
+   "k": "高",
+   "p": "高",
+   "na": "低"
+  },
+  "source": "cfct-estimate"
+ },
+ {
+  "name": "龙眼肉",
+  "per100g": {
+   "energy": 316,
+   "protein": 5.0,
+   "fat": 0.2,
+   "carb": 73.5,
+   "sodium": 36.0,
+   "potassium": 1348,
+   "phosphorus": 87,
+   "calcium": 39,
+   "iron": 3.9,
+   "water": 19
+  },
+  "level": {
+   "k": "高",
+   "p": "低",
+   "na": "低"
+  },
+  "source": "cfct-estimate"
+ },
+ {
+  "name": "黄芪",
+  "per100g": {
+   "energy": 0,
+   "protein": 0.0,
+   "fat": 0.0,
+   "carb": 0.0,
+   "sodium": 0.0,
+   "potassium": 0,
+   "phosphorus": 0,
+   "calcium": 0,
+   "iron": 0.0,
+   "water": 0
+  },
+  "level": {
+   "k": "低",
+   "p": "低",
+   "na": "低"
+  },
+  "source": "seasoning"
+ },
+ {
+  "name": "赤小豆",
+  "per100g": {
+   "energy": 340,
+   "protein": 20.2,
+   "fat": 0.6,
+   "carb": 63.4,
+   "sodium": 2.2,
+   "potassium": 860,
+   "phosphorus": 305,
+   "calcium": 74,
+   "iron": 7.4,
+   "water": 12
+  },
+  "level": {
+   "k": "高",
+   "p": "高",
+   "na": "低"
+  },
+  "source": "cfct-estimate"
+ },
+ {
+  "name": "鲤鱼",
+  "per100g": {
+   "energy": 109,
+   "protein": 17.6,
+   "fat": 4.1,
+   "carb": 0.5,
+   "sodium": 53.7,
+   "potassium": 334,
+   "phosphorus": 204,
+   "calcium": 50,
+   "iron": 1.0,
+   "water": 77
+  },
+  "level": {
+   "k": "高",
+   "p": "高",
+   "na": "低"
+  },
+  "source": "cfct-estimate"
+ },
+ {
+  "name": "鲶鱼",
+  "per100g": {
+   "energy": 102,
+   "protein": 17.3,
+   "fat": 3.7,
+   "carb": 0.0,
+   "sodium": 49.6,
+   "potassium": 351,
+   "phosphorus": 195,
+   "calcium": 42,
+   "iron": 0.8,
+   "water": 77
+  },
+  "level": {
+   "k": "高",
+   "p": "中",
+   "na": "低"
+  },
+  "source": "cfct-estimate"
+ },
+ {
+  "name": "蛋清",
+  "per100g": {
+   "energy": 50,
+   "protein": 11.3,
+   "fat": 0.1,
+   "carb": 1.0,
+   "sodium": 79.3,
+   "potassium": 132,
+   "phosphorus": 18,
+   "calcium": 8,
+   "iron": 0.1,
+   "water": 87
+  },
+  "level": {
+   "k": "低",
+   "p": "低",
+   "na": "低"
+  },
+  "source": "guide-table1.1"
+ },
+ {
+  "name": "龙井茶",
+  "per100g": {
+   "energy": 310,
+   "protein": 27.0,
+   "fat": 2.0,
+   "carb": 46.0,
+   "sodium": 0.0,
+   "potassium": 1660,
+   "phosphorus": 190,
+   "calcium": 0,
+   "iron": 14.0,
+   "water": 5
+  },
+  "level": {
+   "k": "高",
+   "p": "中",
+   "na": "低"
+  },
+  "source": "cfct-estimate"
+ },
+ {
+  "name": "空心菜",
+  "per100g": {
+   "energy": 26,
+   "protein": 2.2,
+   "fat": 0.3,
+   "carb": 3.6,
+   "sodium": 94.3,
+   "potassium": 243,
+   "phosphorus": 38,
+   "calcium": 99,
+   "iron": 2.3,
+   "water": 93
+  },
+  "level": {
+   "k": "中",
+   "p": "低",
+   "na": "低"
+  },
+  "source": "cfct-estimate"
+ },
+ {
+  "name": "鳊鱼",
+  "per100g": {
+   "energy": 135,
+   "protein": 18.3,
+   "fat": 6.3,
+   "carb": 1.2,
+   "sodium": 41.0,
+   "potassium": 290,
+   "phosphorus": 220,
+   "calcium": 26,
+   "iron": 0.7,
+   "water": 73
+  },
+  "level": {
+   "k": "高",
+   "p": "高",
+   "na": "低"
+  },
+  "source": "cfct-estimate"
+ },
+ {
+  "name": "茼蒿",
+  "per100g": {
+   "energy": 26,
+   "protein": 1.9,
+   "fat": 0.3,
+   "carb": 3.9,
+   "sodium": 161.3,
+   "potassium": 220,
+   "phosphorus": 36,
+   "calcium": 73,
+   "iron": 2.5,
+   "water": 93
+  },
+  "level": {
+   "k": "中",
+   "p": "低",
+   "na": "中"
+  },
+  "source": "cfct-estimate"
+ },
+ {
+  "name": "豌豆苗",
+  "per100g": {
+   "energy": 42,
+   "protein": 4.0,
+   "fat": 0.8,
+   "carb": 4.6,
+   "sodium": 18.5,
+   "potassium": 222,
+   "phosphorus": 67,
+   "calcium": 40,
+   "iron": 4.2,
+   "water": 89
+  },
+  "level": {
+   "k": "中",
+   "p": "低",
+   "na": "低"
+  },
+  "source": "cfct-estimate"
+ },
+ {
+  "name": "鲫鱼",
+  "per100g": {
+   "energy": 108,
+   "protein": 17.1,
+   "fat": 2.7,
+   "carb": 3.8,
+   "sodium": 41.2,
+   "potassium": 290,
+   "phosphorus": 193,
+   "calcium": 79,
+   "iron": 1.3,
+   "water": 76
+  },
+  "level": {
+   "k": "高",
+   "p": "中",
+   "na": "低"
+  },
+  "source": "cfct-estimate"
+ },
+ {
+  "name": "乌鱼",
+  "per100g": {
+   "energy": 85,
+   "protein": 18.5,
+   "fat": 1.2,
+   "carb": 0.0,
+   "sodium": 48.8,
+   "potassium": 313,
+   "phosphorus": 232,
+   "calcium": 43,
+   "iron": 0.8,
+   "water": 79
+  },
+  "level": {
+   "k": "高",
+   "p": "高",
+   "na": "低"
+  },
+  "source": "guide-table1.1"
+ },
+ {
+  "name": "油麦菜",
+  "per100g": {
+   "energy": 18,
+   "protein": 1.4,
+   "fat": 0.4,
+   "carb": 2.1,
+   "sodium": 80.0,
+   "potassium": 205,
+   "phosphorus": 31,
+   "calcium": 70,
+   "iron": 1.2,
+   "water": 95
+  },
+  "level": {
+   "k": "中",
+   "p": "低",
+   "na": "低"
+  },
+  "source": "cfct-estimate"
+ },
+ {
+  "name": "紫苏",
+  "per100g": {
+   "energy": 52,
+   "protein": 3.8,
+   "fat": 1.3,
+   "carb": 6.4,
+   "sodium": 210.0,
+   "potassium": 435,
+   "phosphorus": 200,
+   "calcium": 182,
+   "iron": 5.7,
+   "water": 85
+  },
+  "level": {
+   "k": "高",
+   "p": "中",
+   "na": "中"
+  },
+  "source": "cfct-estimate"
+ },
+ {
+  "name": "白扁豆",
+  "per100g": {
+   "energy": 332,
+   "protein": 19.3,
+   "fat": 1.4,
+   "carb": 60.5,
+   "sodium": 0.8,
+   "potassium": 578,
+   "phosphorus": 290,
+   "calcium": 45,
+   "iron": 3.9,
+   "water": 13
+  },
+  "level": {
+   "k": "高",
+   "p": "高",
+   "na": "低"
+  },
+  "source": "cfct-estimate"
+ },
+ {
+  "name": "玉兰片",
+  "per100g": {
+   "energy": 22,
+   "protein": 1.2,
+   "fat": 0.1,
+   "carb": 4.1,
+   "sodium": 20.0,
+   "potassium": 50,
+   "phosphorus": 20,
+   "calcium": 15,
+   "iron": 0.5,
+   "water": 92
+  },
+  "level": {
+   "k": "低",
+   "p": "低",
    "na": "低"
   },
   "source": "cfct-estimate"

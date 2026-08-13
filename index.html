@@ -495,7 +495,7 @@ const INDICATORS = [
   ["albumin","白蛋白"],["hemoglobin","血红蛋白"],["uric","尿酸"]
 ];
 const STATUSES = ["不关注","正常","偏高","偏低"];
-const INGREDIENTS = ["土豆","茄子","鸡蛋","西红柿","西葫芦","冬瓜","豆腐","白菜","胡萝卜","西兰花","南瓜","小米","黄瓜","粉丝","山药","排骨","鲈鱼","苦瓜","虾仁","丝瓜","青椒","小葱","蒜","姜","菠菜","芹菜","莴笋","莲藕","木耳","香菇","平菇","金针菇","豆角","荷兰豆","玉米","大米","燕麦","鸡胸肉","瘦肉","牛肉","羊肉","鸭肉","草鱼","带鱼","鳕鱼","海带","紫菜","洋葱","白萝卜","红薯","芋头","上海青","油菜","生菜","圆白菜","佛手瓜","芦笋","秋葵","红萝卜","韭菜","花菜","豆腐干","鸡腿","银耳","百合","荞麦","面粉","香菜","枸杞"];
+const INGREDIENTS = ["土豆","茄子","鸡蛋","西红柿","西葫芦","冬瓜","豆腐","白菜","胡萝卜","西兰花","南瓜","小米","黄瓜","粉丝","山药","排骨","鲈鱼","苦瓜","虾仁","丝瓜","青椒","小葱","蒜","姜","菠菜","芹菜","莴笋","莲藕","木耳","香菇","平菇","金针菇","豆角","荷兰豆","玉米","大米","燕麦","鸡胸肉","瘦肉","牛肉","羊肉","鸭肉","草鱼","带鱼","鳕鱼","海带","紫菜","洋葱","白萝卜","红薯","芋头","上海青","油菜","生菜","圆白菜","佛手瓜","芦笋","秋葵","红萝卜","韭菜","花菜","豆腐干","鸡腿","银耳","百合","荞麦","面粉","香菜","枸杞","鸡肉","五花肉","南豆腐","木耳干","黑米","绿豆","赤小豆","莲子","白扁豆","薏苡仁","大枣","龙眼肉","酸菜","鲤鱼","鲫鱼","鲶鱼","鳊鱼","乌鱼","荠菜","空心菜","油麦菜","豌豆苗","茼蒿","紫苏","玉兰片"];
 
 // 调味料不计入“现有食材”匹配；别名用于食材名统一（如 大白菜=白菜）
 const CONDIMENTS = new Set(["食用油","香油","醋","生抽","蒸鱼豉油","清水","温水"]);
@@ -699,7 +699,7 @@ function recipeCardHtml(r){
         <div>
           <div class="recipe-title">${r.name}</div>
           <div class="meta" style="margin-top:4px">
-            <span>${r.region}</span><span>${r.season}季</span><span>${r.meal}</span><span>${r.time}</span>
+            <span>${r.region}</span><span>${r.season==="四季"?"四季":r.season+"季"}</span><span>${r.meal}</span><span>${r.time}</span>
           </div>
         </div>
         <div class="score">${r.score}%</div>
@@ -775,7 +775,7 @@ function openRecipe(id){
     </div>
     <div class="meta" style="margin-bottom:14px">
       ${r.tags.map(t=>`<span class="pill ${t.includes("慎")?"warn":"green"}">${t}</span>`).join("")}
-      <span class="pill soft">${r.region} · ${r.season}季 · ${r.meal}</span>
+      <span class="pill soft">${r.region} · ${r.season==="四季"?"四季":r.season+"季"} · ${r.meal}</span>
       <span class="pill soft">${r.time} · ${r.difficulty}</span>
       <span class="pill soft">${r.stages.includes("all") ? "适用：全分期" : "适用：" + r.stages.join("/")}</span>
     </div>

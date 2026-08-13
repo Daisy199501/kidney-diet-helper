@@ -18,12 +18,12 @@
 
 ```text
 index.html            生产版网页入口
-data/recipes.js       100 道菜谱数据
-data/ingredients.js   食材库（每100克参考值，含来源标注）
+data/recipes.js       133 道菜谱数据
+data/ingredients.js   食材库（108 项，每100克参考值，含来源标注）
 assets/               PWA 图标与 favicon
 manifest.webmanifest  PWA 清单
 scripts/              构建、校验、测试脚本
-校验报告.md            100 道菜谱与指南符合性校验报告
+校验报告.md            133 道菜谱与指南符合性校验报告
 网页原型/              早期可点击原型（历史版本）
 参考资料/              指南 PDF 与来源说明
 ```

@@ -18,6 +18,7 @@ def kcal(p, f, c):
 
 FOOD = {
     "鸡蛋":      dict(protein=13.0, fat=8.8, carb=2.8, sodium=131.4, potassium=154, phosphorus=130, calcium=56, iron=2.0, water=75, source="guide-table1.1"),
+    "鸡肉":      dict(protein=20.3, fat=9.4, carb=0.9, sodium=62.8, potassium=249, phosphorus=166, calcium=9,  iron=1.4, water=74, source="guide-table1.1"),
     "鸡胸肉":    dict(protein=24.6, fat=5.0, carb=0.6, sodium=44.8, potassium=333, phosphorus=170, calcium=3, iron=0.6, water=74, source="guide-table1.1"),
     "鸡腿":      dict(protein=20.2, fat=7.2, carb=0.0, sodium=73.6, potassium=221, phosphorus=271, calcium=6, iron=1.4, water=72, source="guide-table1.1"),
     "瘦肉":      dict(protein=20.3, fat=6.2, carb=1.5, sodium=57.5, potassium=305, phosphorus=189, calcium=6, iron=3.0, water=71, source="guide-table1.1"),
@@ -87,6 +88,37 @@ FOOD = {
     "枸杞":      dict(protein=13.9, fat=1.5, carb=64.1, sodium=250.0, potassium=434, phosphorus=110, calcium=60,  iron=5.4, water=16, source="cfct-estimate"),
     "菠菜":      dict(protein=2.6,  fat=0.3, carb=4.5,  sodium=85.0, potassium=311, phosphorus=47,  calcium=66,  iron=2.9, water=91, source="cfct-estimate"),
     "荞麦":      dict(protein=9.3,  fat=2.3, carb=73.0, sodium=4.7,  potassium=401, phosphorus=297, calcium=47,  iron=6.2, water=13, source="cfct-estimate"),
+    # 2026-08-13 新增（用户整理菜谱引入）
+    "盐":        dict(protein=0.0,  fat=0.0, carb=0.0,  sodium=39300.0, potassium=0, phosphorus=0, calcium=0, iron=0.0, water=0, source="seasoning"),
+    "玉米淀粉":  dict(protein=1.2,  fat=0.1, carb=86.9, sodium=6.3,  potassium=8,   phosphorus=25,  calcium=18, iron=0.6, water=12, source="guide-table1.1"),
+    "小麦淀粉":  dict(protein=0.3,  fat=0.1, carb=86.5, sodium=5.0,  potassium=8,   phosphorus=25,  calcium=10, iron=0.5, water=12, source="cfct-estimate"),
+    "木耳干":    dict(protein=12.1, fat=1.5, carb=35.7, sodium=48.5, potassium=757, phosphorus=292, calcium=247, iron=97.0, water=15, source="guide-table1.1"),
+    "南豆腐":    dict(protein=6.2,  fat=2.5, carb=2.4,  sodium=6.4,  potassium=120, phosphorus=84,  calcium=116, iron=1.5, water=88, source="cfct-estimate"),
+    "五花肉":    dict(protein=7.7,  fat=35.3, carb=0.0, sodium=57.5, potassium=218, phosphorus=121, calcium=6,  iron=1.4, water=50, source="cfct-estimate"),
+    "酸菜":      dict(protein=1.1,  fat=0.2, carb=4.2,  sodium=650.0, potassium=130, phosphorus=30,  calcium=50, iron=1.0, water=92, source="cfct-estimate"),
+    "荠菜":      dict(protein=2.9,  fat=0.4, carb=4.7,  sodium=31.6, potassium=280, phosphorus=81,  calcium=294, iron=5.4, water=90, source="cfct-estimate"),
+    "薏苡仁":    dict(protein=12.8, fat=3.3, carb=71.1, sodium=3.6,  potassium=238, phosphorus=217, calcium=42, iron=3.6, water=11, source="cfct-estimate"),
+    "绿豆":      dict(protein=21.6, fat=0.8, carb=62.0, sodium=3.2,  potassium=787, phosphorus=337, calcium=81, iron=6.5, water=12, source="guide-table1.1"),
+    "大枣":      dict(protein=1.1,  fat=0.3, carb=30.5, sodium=6.2,  potassium=524, phosphorus=51,  calcium=64, iron=2.3, water=67, source="cfct-estimate"),
+    "黑米":      dict(protein=9.4,  fat=2.5, carb=72.2, sodium=7.1,  potassium=256, phosphorus=356, calcium=12, iron=1.6, water=14, source="cfct-estimate"),
+    "莲子":      dict(protein=17.2, fat=2.0, carb=67.2, sodium=5.1,  potassium=846, phosphorus=550, calcium=97, iron=3.6, water=10, source="cfct-estimate"),
+    "龙眼肉":    dict(protein=5.0,  fat=0.2, carb=73.5, sodium=36.0, potassium=1348, phosphorus=87, calcium=39, iron=3.9, water=19, source="cfct-estimate"),
+    "黄芪":      dict(protein=0.0,  fat=0.0, carb=0.0,  sodium=0.0,  potassium=0,   phosphorus=0,    calcium=0, iron=0.0, water=0, source="seasoning"),
+    "赤小豆":    dict(protein=20.2, fat=0.6, carb=63.4, sodium=2.2,  potassium=860, phosphorus=305, calcium=74, iron=7.4, water=12, source="cfct-estimate"),
+    "鲤鱼":      dict(protein=17.6, fat=4.1, carb=0.5,  sodium=53.7, potassium=334, phosphorus=204, calcium=50, iron=1.0, water=77, source="cfct-estimate"),
+    "鲶鱼":      dict(protein=17.3, fat=3.7, carb=0.0,  sodium=49.6, potassium=351, phosphorus=195, calcium=42, iron=0.8, water=77, source="cfct-estimate"),
+    "蛋清":      dict(protein=11.3, fat=0.1, carb=1.0,  sodium=79.3, potassium=132, phosphorus=18,  calcium=8,  iron=0.1, water=87, source="guide-table1.1"),
+    "龙井茶":    dict(protein=27.0, fat=2.0, carb=46.0, sodium=0.0,  potassium=1660, phosphorus=190, calcium=0, iron=14.0, water=5, source="cfct-estimate"),
+    "空心菜":    dict(protein=2.2,  fat=0.3, carb=3.6,  sodium=94.3, potassium=243, phosphorus=38,  calcium=99, iron=2.3, water=93, source="cfct-estimate"),
+    "鳊鱼":      dict(protein=18.3, fat=6.3, carb=1.2,  sodium=41.0, potassium=290, phosphorus=220, calcium=26, iron=0.7, water=73, source="cfct-estimate"),
+    "茼蒿":      dict(protein=1.9,  fat=0.3, carb=3.9,  sodium=161.3, potassium=220, phosphorus=36, calcium=73, iron=2.5, water=93, source="cfct-estimate"),
+    "豌豆苗":    dict(protein=4.0,  fat=0.8, carb=4.6,  sodium=18.5, potassium=222, phosphorus=67,  calcium=40, iron=4.2, water=89, source="cfct-estimate"),
+    "鲫鱼":      dict(protein=17.1, fat=2.7, carb=3.8,  sodium=41.2, potassium=290, phosphorus=193, calcium=79, iron=1.3, water=76, source="cfct-estimate"),
+    "乌鱼":      dict(protein=18.5, fat=1.2, carb=0.0,  sodium=48.8, potassium=313, phosphorus=232, calcium=43, iron=0.8, water=79, source="guide-table1.1"),
+    "油麦菜":    dict(protein=1.4,  fat=0.4, carb=2.1,  sodium=80.0, potassium=205, phosphorus=31,  calcium=70, iron=1.2, water=95, source="cfct-estimate"),
+    "紫苏":      dict(protein=3.8,  fat=1.3, carb=6.4,  sodium=210.0, potassium=435, phosphorus=200, calcium=182, iron=5.7, water=85, source="cfct-estimate"),
+    "白扁豆":    dict(protein=19.3, fat=1.4, carb=60.5, sodium=0.8,  potassium=578, phosphorus=290, calcium=45, iron=3.9, water=13, source="cfct-estimate"),
+    "玉兰片":    dict(protein=1.2,  fat=0.1, carb=4.1,  sodium=20.0, potassium=50,  phosphorus=20,  calcium=15, iron=0.5, water=92, source="cfct-estimate"),
     "食用油":    dict(protein=0.0,  fat=100.0, carb=0.0, sodium=0.0,  potassium=0,   phosphorus=0,    calcium=0,   iron=0.0, water=0,  source="seasoning"),
     "香油":      dict(protein=0.0,  fat=100.0, carb=0.0, sodium=0.0,  potassium=0,   phosphorus=0,    calcium=0,   iron=0.0, water=0,  source="seasoning"),
     "醋":        dict(protein=2.1,  fat=0.3, carb=4.9,  sodium=80.0,  potassium=0,   phosphorus=0,    calcium=17,  iron=1.3, water=90, source="seasoning"),
@@ -101,6 +133,29 @@ ALIAS = {
     "鸡腿肉": "鸡腿",
     "北豆腐": "豆腐",
     "葱":     "小葱",
+    "鲜山药": "山药",
+    "鲜百合": "百合",
+    "鲜紫苏": "紫苏",
+    "柿子椒": "青椒",
+    "猪五花肉": "五花肉",
+    "粉条":   "粉丝",
+    "植物油": "食用油",
+    "荞麦面粉": "荞麦",
+    "猪里脊肉": "瘦肉",
+    "莴苣":   "莴笋",
+    "青笋":   "莴笋",
+    "大蒜":   "蒜",
+    "猪小排": "排骨",
+    "木耳（干）": "木耳干",
+    "木耳（水发）": "木耳",
+    "淀粉":   "玉米淀粉",
+    "牦牛腱子肉": "牛肉",
+    "猪排骨": "排骨",
+    "猪瘦肉": "瘦肉",
+    "红薯粉条": "粉丝",
+    "莲子肉": "莲子",
+    "虾":     "虾仁",
+    "鸡块":   "鸡肉",
 }
 
 def norm_name(n):
@@ -120,9 +175,15 @@ def parse_amount(name, amount):
     m = re.search(r"(\d+)个", amount)
     if m:
         return float(m.group(1)) * 100.0, False
+    # 兜底：数字默认按克（如“盐1”“鲤鱼40g（飞水）”）
+    m = re.search(r"(\d+(?:\.\d+)?)", amount)
+    if m:
+        return float(m.group(1)), False
     return 0.0, False
 
-def seasoning_sodium(name, steps, has_soy):
+def seasoning_sodium(name, steps, has_soy, has_salt):
+    if has_salt:
+        return 0  # 食材清单中已明确写盐（如“盐1g”），按含量计算，不再估算
     text = "".join(steps)
     if "不加盐" in text:
         return 0
@@ -141,6 +202,7 @@ def compute_recipe(r):
     totals = dict(energy=0.0, protein=0.0, fat=0.0, carb=0.0, sodium=0.0,
                   potassium=0.0, phosphorus=0.0, calcium=0.0, iron=0.0, water=0.0)
     has_soy = False
+    has_salt = False
     main_ing = []
     for raw_name, amount in r["ingredients"]:
         name = norm_name(raw_name)
@@ -153,21 +215,34 @@ def compute_recipe(r):
         if is_water:
             totals["water"] += grams
             continue
+        # 指南附录1：烹调前先飞水可减少部分钾、磷；酸菜漂洗去盐
+        feishui = "飞水" in amount
+        quyan = "去盐" in amount
         for key in ("protein", "fat", "carb", "sodium", "potassium", "phosphorus", "calcium", "iron"):
-            totals[key] += f[key] * grams / 100.0
+            factor = 1.0
+            if feishui and key in ("potassium", "phosphorus"):
+                factor = 0.7
+            if quyan and key == "sodium":
+                factor = 0.4
+            totals[key] += f[key] * grams / 100.0 * factor
         totals["water"] += f["water"] * grams / 100.0
         if f["source"] != "seasoning" and f["water"] > 30:
             main_ing.append(name)
         if name in ("生抽", "蒸鱼豉油"):
             has_soy = True
-    totals["sodium"] += seasoning_sodium(r["name"], r["steps"], has_soy)
+        if name == "盐":
+            has_salt = True
+    totals["sodium"] += seasoning_sodium(r["name"], r["steps"], has_soy, has_salt)
     totals["energy"] = round(4*totals["protein"] + 9*totals["fat"] + 4*totals["carb"])
     out = {k: round(v, 1) if k in ("protein", "fat", "carb", "iron") else round(v) for k, v in totals.items()}
     out["energy"] = totals["energy"]
-    out["water"] = r["nutrition"]["water"]  # 水量保留原口径（含食材含水与烹饪加水估算）
+    if r.get("nutrition") and r["nutrition"].get("water") is not None:
+        out["water"] = r["nutrition"]["water"]  # 水量保留原口径（含食材含水与烹饪加水估算）
+    else:
+        out["water"] = round(totals["water"], 1)
     return out
 
-def derive_flags(n, old_flags):
+def derive_flags(n, old_flags, name):
     flags = []
     if n["potassium"] <= 280: flags.append("lowK")
     if n["potassium"] >= 400 or ("highK" in old_flags and n["potassium"] >= 350): flags.append("highK")
@@ -176,6 +251,7 @@ def derive_flags(n, old_flags):
     if n["sodium"] <= 350: flags.append("lowNa")
     if n["protein"] >= 9: flags.append("goodProtein")
     if n["iron"] >= 1.8: flags.append("ironRich")
+    if "嘌呤" in name: flags.append("lowPurine")
     return flags
 
 def tags_from_flags(flags):
@@ -198,7 +274,7 @@ for r in recipes:
         continue
     old_n = r["nutrition"]
     old_flags = list(r.get("flags", []))
-    new_flags = derive_flags(new_n, old_flags)
+    new_flags = derive_flags(new_n, old_flags, r["name"])
     if "lowPurine" in old_flags:
         new_flags.append("lowPurine")
     new_flags = list(dict.fromkeys(new_flags))
@@ -211,11 +287,11 @@ for r in recipes:
         r["notes"] += "磷含量偏高，血磷偏高者建议限量。"
     changed = {
         "id": r["id"], "name": r["name"], "region": r["region"], "meal": r["meal"],
-        "energy": "%s→%s" % (old_n["energy"], new_n["energy"]),
-        "protein": "%s→%s" % (old_n["protein"], new_n["protein"]),
-        "sodium": "%s→%s" % (old_n["sodium"], new_n["sodium"]),
-        "potassium": "%s→%s" % (old_n["potassium"], new_n["potassium"]),
-        "phosphorus": "%s→%s" % (old_n["phosphorus"], new_n["phosphorus"]),
+        "energy": "%s→%s" % (old_n.get("energy", "—"), new_n["energy"]),
+        "protein": "%s→%s" % (old_n.get("protein", "—"), new_n["protein"]),
+        "sodium": "%s→%s" % (old_n.get("sodium", "—"), new_n["sodium"]),
+        "potassium": "%s→%s" % (old_n.get("potassium", "—"), new_n["potassium"]),
+        "phosphorus": "%s→%s" % (old_n.get("phosphorus", "—"), new_n["phosphorus"]),
         "flags": "/".join(old_flags) + " → " + "/".join(new_flags),
     }
     rows.append(changed)
@@ -227,9 +303,9 @@ if missing:
     raise SystemExit(1)
 
 # 完整性校验
-assert len(recipes) == 100
+assert len(recipes) >= 100, "菜谱数量异常"
 ids = [r["id"] for r in recipes]
-assert len(set(ids)) == 100, "id 不唯一"
+assert len(set(ids)) == len(ids), "id 不唯一"
 for r in recipes:
     n = r["nutrition"]
     for k in ("energy", "protein", "fat", "carb", "sodium", "potassium", "phosphorus", "calcium", "iron", "water"):
